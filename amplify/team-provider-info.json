@@ -1,15 +1,15 @@
 {
-  "prod": {
+  "devt": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-js-exam-prod-143156-authRole",
-      "UnauthRoleArn": "arn:aws:iam::602307824922:role/amplify-js-exam-prod-143156-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::602307824922:role/amplify-js-exam-prod-143156-authRole",
+      "AuthRoleName": "amplify-js-exam-devt-161613-authRole",
+      "UnauthRoleArn": "arn:aws:iam::602307824922:role/amplify-js-exam-devt-161613-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::602307824922:role/amplify-js-exam-devt-161613-authRole",
       "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-js-exam-prod-143156-deployment",
-      "UnauthRoleName": "amplify-js-exam-prod-143156-unauthRole",
-      "StackName": "amplify-js-exam-prod-143156",
-      "StackId": "arn:aws:cloudformation:us-east-1:602307824922:stack/amplify-js-exam-prod-143156/dd642dd0-592a-11ea-a8c7-12505ef78976",
-      "AmplifyAppId": "d3kfbonkvlp4tz"
+      "DeploymentBucketName": "amplify-js-exam-devt-161613-deployment",
+      "UnauthRoleName": "amplify-js-exam-devt-161613-unauthRole",
+      "StackName": "amplify-js-exam-devt-161613",
+      "StackId": "arn:aws:cloudformation:us-east-1:602307824922:stack/amplify-js-exam-devt-161613/ebc1eac0-f84c-11ec-a8ed-0a8d2d4dc5ab",
+      "AmplifyAppId": "d2y4q73oz9ms0l"
     },
     "categories": {
       "auth": {

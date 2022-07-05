@@ -13,12 +13,16 @@ export const getRoom = /* GraphQL */ `
         timeEnd
         status
         tags
+        createdAt
+        updatedAt
       }
       subjectId
       description
       host {
         id
         name
+        createdAt
+        updatedAt
       }
       createTime
       password
@@ -32,7 +36,11 @@ export const getRoom = /* GraphQL */ `
         timeBegin
         timeEnd
         status
+        createdAt
+        updatedAt
       }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -49,13 +57,15 @@ export const listRooms = /* GraphQL */ `
         description
         createTime
         password
+        createdAt
+        updatedAt
       }
       nextToken
     }
   }
 `;
-export const getJeUser = /* GraphQL */ `
-  query GetJeUser($id: ID!) {
+export const getJEUser = /* GraphQL */ `
+  query GetJEUser($id: ID!) {
     getJEUser(id: $id) {
       id
       name
@@ -65,11 +75,15 @@ export const getJeUser = /* GraphQL */ `
         description
         createTime
         password
+        createdAt
+        updatedAt
       }
       team {
         id
         name
         description
+        createdAt
+        updatedAt
       }
       tests {
         nextToken
@@ -82,12 +96,16 @@ export const getJeUser = /* GraphQL */ `
         timeEnd
         status
         tags
+        createdAt
+        updatedAt
       }
+      createdAt
+      updatedAt
     }
   }
 `;
-export const listJeUsers = /* GraphQL */ `
-  query ListJeUsers(
+export const listJEUsers = /* GraphQL */ `
+  query ListJEUsers(
     $filter: ModelJEUserFilterInput
     $limit: Int
     $nextToken: String
@@ -96,6 +114,8 @@ export const listJeUsers = /* GraphQL */ `
       items {
         id
         name
+        createdAt
+        updatedAt
       }
       nextToken
     }
@@ -113,6 +133,8 @@ export const getTeam = /* GraphQL */ `
       questionSet {
         nextToken
       }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -127,6 +149,8 @@ export const listTeams = /* GraphQL */ `
         id
         name
         description
+        createdAt
+        updatedAt
       }
       nextToken
     }
@@ -142,11 +166,15 @@ export const getTest = /* GraphQL */ `
         description
         createTime
         password
+        createdAt
+        updatedAt
       }
       team {
         id
         name
         description
+        createdAt
+        updatedAt
       }
       subjectId
       users {
@@ -155,6 +183,8 @@ export const getTest = /* GraphQL */ `
       host {
         id
         name
+        createdAt
+        updatedAt
       }
       description
       timeBegin
@@ -167,6 +197,8 @@ export const getTest = /* GraphQL */ `
       }
       status
       tags
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -185,13 +217,15 @@ export const listTests = /* GraphQL */ `
         timeEnd
         status
         tags
+        createdAt
+        updatedAt
       }
       nextToken
     }
   }
 `;
-export const getTestJeUser = /* GraphQL */ `
-  query GetTestJeUser($id: ID!) {
+export const getTestJEUser = /* GraphQL */ `
+  query GetTestJEUser($id: ID!) {
     getTestJEUser(id: $id) {
       id
       userID
@@ -199,6 +233,8 @@ export const getTestJeUser = /* GraphQL */ `
       user {
         id
         name
+        createdAt
+        updatedAt
       }
       test {
         id
@@ -208,12 +244,16 @@ export const getTestJeUser = /* GraphQL */ `
         timeEnd
         status
         tags
+        createdAt
+        updatedAt
       }
+      createdAt
+      updatedAt
     }
   }
 `;
-export const listTestJeUsers = /* GraphQL */ `
-  query ListTestJeUsers(
+export const listTestJEUsers = /* GraphQL */ `
+  query ListTestJEUsers(
     $filter: ModelTestJEUserFilterInput
     $limit: Int
     $nextToken: String
@@ -223,6 +263,8 @@ export const listTestJeUsers = /* GraphQL */ `
         id
         userID
         testID
+        createdAt
+        updatedAt
       }
       nextToken
     }
@@ -237,6 +279,8 @@ export const getRecord = /* GraphQL */ `
       interviewer {
         id
         name
+        createdAt
+        updatedAt
       }
       timeBegin
       timeEnd
@@ -259,6 +303,8 @@ export const getRecord = /* GraphQL */ `
         name
         content
         test
+        createdAt
+        updatedAt
       }
       test {
         id
@@ -268,6 +314,8 @@ export const getRecord = /* GraphQL */ `
         timeEnd
         status
         tags
+        createdAt
+        updatedAt
       }
       room {
         id
@@ -275,7 +323,11 @@ export const getRecord = /* GraphQL */ `
         description
         createTime
         password
+        createdAt
+        updatedAt
       }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -293,6 +345,8 @@ export const listRecords = /* GraphQL */ `
         timeBegin
         timeEnd
         status
+        createdAt
+        updatedAt
       }
       nextToken
     }
@@ -301,6 +355,7 @@ export const listRecords = /* GraphQL */ `
 export const getResult = /* GraphQL */ `
   query GetResult($id: ID!) {
     getResult(id: $id) {
+      id
       logic
       language
       workwith
@@ -316,8 +371,12 @@ export const getResult = /* GraphQL */ `
         timeEnd
         status
         tags
+        createdAt
+        updatedAt
       }
       time
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -329,6 +388,7 @@ export const listResults = /* GraphQL */ `
   ) {
     listResults(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
+        id
         logic
         language
         workwith
@@ -337,6 +397,8 @@ export const listResults = /* GraphQL */ `
         author
         role
         time
+        createdAt
+        updatedAt
       }
       nextToken
     }
@@ -345,6 +407,7 @@ export const listResults = /* GraphQL */ `
 export const getComment = /* GraphQL */ `
   query GetComment($id: ID!) {
     getComment(id: $id) {
+      id
       author
       time
       content
@@ -359,7 +422,11 @@ export const getComment = /* GraphQL */ `
         timeBegin
         timeEnd
         status
+        createdAt
+        updatedAt
       }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -371,6 +438,7 @@ export const listComments = /* GraphQL */ `
   ) {
     listComments(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
+        id
         author
         time
         content
@@ -378,6 +446,8 @@ export const listComments = /* GraphQL */ `
         quality
         completeness
         tags
+        createdAt
+        updatedAt
       }
       nextToken
     }
@@ -396,10 +466,14 @@ export const getHistory = /* GraphQL */ `
         timeBegin
         timeEnd
         status
+        createdAt
+        updatedAt
       }
       snapComments {
         nextToken
       }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -414,6 +488,8 @@ export const listHistorys = /* GraphQL */ `
         id
         time
         code
+        createdAt
+        updatedAt
       }
       nextToken
     }
@@ -430,7 +506,11 @@ export const getSnapComment = /* GraphQL */ `
         id
         time
         code
+        createdAt
+        updatedAt
       }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -446,6 +526,8 @@ export const listSnapComments = /* GraphQL */ `
         time
         author
         content
+        createdAt
+        updatedAt
       }
       nextToken
     }
@@ -466,7 +548,11 @@ export const getQuestionSnapshot = /* GraphQL */ `
         timeBegin
         timeEnd
         status
+        createdAt
+        updatedAt
       }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -487,6 +573,8 @@ export const listQuestionSnapshots = /* GraphQL */ `
         name
         content
         test
+        createdAt
+        updatedAt
       }
       nextToken
     }
@@ -500,6 +588,8 @@ export const getQuestionSet = /* GraphQL */ `
         id
         name
         description
+        createdAt
+        updatedAt
       }
       questions {
         nextToken
@@ -507,6 +597,8 @@ export const getQuestionSet = /* GraphQL */ `
       name
       description
       tags
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -522,6 +614,8 @@ export const listQuestionSets = /* GraphQL */ `
         name
         description
         tags
+        createdAt
+        updatedAt
       }
       nextToken
     }
@@ -537,11 +631,15 @@ export const getQuestion = /* GraphQL */ `
         name
         description
         tags
+        createdAt
+        updatedAt
       }
       name
       content
       test
       tags
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -559,6 +657,8 @@ export const listQuestions = /* GraphQL */ `
         content
         test
         tags
+        createdAt
+        updatedAt
       }
       nextToken
     }

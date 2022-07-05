@@ -52,7 +52,7 @@ v0.1.0
 
 ### Step 1. Install Amplify-cli
 
-1. Run the command `npm i -g @aws-amplify/cli@4.13.1` (Install [nvm](https://github.com/nvm-sh/nvm) if you have trouble with installing package globally) 
+1. Run the command `npm i -g @aws-amplify/cli@4.13.1` (Install [nvm](https://github.com/nvm-sh/nvm) if you have trouble with installing package globally) if not working please install amplify cli updated by npm i -g @aws-amplify/cli
 2. Run the command `amplify` and make sure it will show usage information
 
 ### Step 2. Setup Local Config
@@ -73,3 +73,17 @@ v0.1.0
 	* **? Do you want to use an AWS profile?** `Yes`
 	* **? Please choose the profile you want to use** `amplify-user`
 3. If success you'll see the follow message: `Your project has been successfully initialized and connected to the cloud!` :tada::tada::tada:
+### Step 3- if init with error:
+1. Go to the amplify -> CloudFormation->delete all the Stacks with status: "UPDATED Failed"
+2. Then redo the `amplify init`
+3. your `team-provider-info.json` shoud be updated with `app_id`
+4. If you are a complete new user of Amplify, following guide maybe helpful:
+
+https://aws.amazon.com/tw/blogs/mobile/restoring-aws-amplify-project-after-deleting-it-from-the-cloud/
+https://ithelp.ithome.com.tw/articles/10188245
+https://travor20814.medium.com/react-%E5%B0%88%E6%A1%88%E6%9E%B6%E6%A7%8B%E5%88%86%E4%BA%AB-%E6%88%91%E7%9A%84%E8%B8%A9%E9%9B%B7%E9%80%B2%E5%8C%96%E9%81%8E%E7%A8%8B-aceea0747045
+https://eyesofkids.gitbooks.io/react-basic-zh-tw/content/day27_redux_ex3/ give some concept of redux
+https://v5.reactrouter.com/web/guides/quick-start 
+
+### Step 4 - Deployment
+After the amplify init is finished, type `npm deploy`

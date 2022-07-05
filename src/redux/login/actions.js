@@ -1,7 +1,7 @@
 import { Auth, API, graphqlOperation } from 'aws-amplify';
 import filter from 'lodash/filter';
-import { createJeUser } from 'graphql/mutations';
-import { listJeUsers } from './queries';
+import { createJEUser as createJEUserGraphQL } from 'graphql/mutations';
+import { listJEUsers } from './queries';
 import {
   AUTO_LOGIN,
   SET_USERNAME,
@@ -9,11 +9,10 @@ import {
   DEL_HOSTINGS,
   LOGOUT,
 } from './constants';
-import * as loginAction from './actions';
 
 const getJEUserByName = name =>
   API.graphql(
-    graphqlOperation(listJeUsers, {
+    graphqlOperation(listJEUsers, {
       filter: { name: { eq: name } },
       limit: 1000,
     }),
@@ -25,10 +24,9 @@ const getJEUserByName = name =>
       return resp.data.listJEUsers.items[0];
     })
     .catch(err => console.warn('getJEUserByName error:', err));
-
 const createJEUser = name =>
   API.graphql(
-    graphqlOperation(createJeUser, {
+    graphqlOperation(createJEUserGraphQL, {
       input: { name },
     }),
   )
@@ -55,7 +53,7 @@ export function setUsername(data) {
 
       localStorage.setItem('jeUser', JSON.stringify(jeUser));
       if (jeUser.room) {
-        dispatch(loginAction.setHostings(jeUser.room.id));
+        dispatch(setHostings(jeUser.room.id));
       }
     } catch (error) {
       console.log('error:', error);

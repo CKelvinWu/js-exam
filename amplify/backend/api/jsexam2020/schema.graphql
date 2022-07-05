@@ -1,53 +1,49 @@
-type Room @model {
+type Room @model @auth(rules: [{allow: private}]) {
   id: ID!
   test: Test @connection(name: "RoomTests")
-  subjectId: String # could be email
+  subjectId: String
   description: String
   host: JEUser @connection
   createTime: AWSDateTime
   password: String
-  users: [JEUser] @connection(name: "RoomJEUsers") # host & observers
-  currentRecord: Record @connection(name: "RoomCurrentRecord") # ID for current Record
+  users: [JEUser] @connection(name: "RoomJEUsers")
+  currentRecord: Record @connection(name: "RoomCurrentRecord")
 }
 
-type JEUser @model {
+type JEUser @model @auth(rules: [{allow: private}]) {
   id: ID!
   name: String
-  room: Room @connection(name: "RoomJEUsers") # after leave the room, must clear the value
+  room: Room @connection(name: "RoomJEUsers")
   team: Team @connection(name: "TeamJEUsers")
   tests: [TestJEUser] @connection(keyName: "byJEUser", fields: ["id"])
-  hostTest: Test @connection(name: "TestHost") # the test this JEUser host
+  hostTest: Test @connection(name: "TestHost")
 }
 
-type Team @model {
+type Team @model @auth(rules: [{allow: private}]) {
   id: ID!
   name: String
   description: String
   users: [JEUser] @connection(name: "TeamJEUsers")
-  questionSet: [QuestionSet] @connection(name: "TeamQuestionSets") # currenly one team has one question set
+  questionSet: [QuestionSet] @connection(name: "TeamQuestionSets")
 }
 
-type Test @model {
+type Test @model @auth(rules: [{allow: private}]) {
   id: ID!
   room: Room @connection(name: "RoomTests")
   team: Team
-  subjectId: String # could be email
+  subjectId: String
   users: [TestJEUser] @connection(keyName: "byTest", fields: ["id"])
-  host: JEUser @connection(name: "TestHost") # ID for current JEUser
+  host: JEUser @connection(name: "TestHost")
   description: String
   timeBegin: AWSDateTime
   timeEnd: AWSDateTime
   records: [Record] @connection(name: "TestRecords")
   results: [Result] @connection(name: "TestResults")
-  status: String! # open/closed
+  status: String!
   tags: [String]
 }
 
-# Many to many join model(Test & JEUser)
-type TestJEUser
-  @model
-  @key(name: "byJEUser", fields: ["userID", "testID"])
-  @key(name: "byTest", fields: ["testID", "userID"]) {
+type TestJEUser @model @key(name: "byJEUser", fields: ["userID", "testID"]) @key(name: "byTest", fields: ["testID", "userID"]) {
   id: ID!
   userID: ID!
   testID: ID!
@@ -57,12 +53,12 @@ type TestJEUser
 
 type Record @model {
   id: ID!
-  subjectId: String #could be email
+  subjectId: String
   syncCode: String
   interviewer: JEUser
   timeBegin: AWSDateTime
   timeEnd: AWSDateTime
-  status: String # inprogress/closed
+  status: String
   comment: [Comment] @connection(name: "RecordComments")
   history: [History] @connection(name: "RecordHistories")
   ques: QuesSnapshot
@@ -116,7 +112,7 @@ type SnapComment @model {
 }
 
 type QuesSnapshot {
-  type: String # eg. javascript
+  type: String
   name: String
   content: String
   test: String
@@ -124,15 +120,14 @@ type QuesSnapshot {
 
 type QuestionSnapshot @model {
   id: ID!
-  type: String # eg. javascript
+  type: String
   name: String
   content: String
   test: String
   record: Record @connection(name: "RecordQuestionSnapshot")
 }
 
-type QuestionSet
-  @model { #question set for host to pick in a test
+type QuestionSet @model {
   id: ID!
   team: Team @connection(name: "TeamQuestionSets")
   questions: [Question] @connection(name: "QuestionSetQuestions")
@@ -143,7 +138,7 @@ type QuestionSet
 
 type Question @model {
   id: ID!
-  type: String # eg. javascript
+  type: String
   questionSet: QuestionSet @connection(name: "QuestionSetQuestions")
   name: String
   content: String
@@ -152,14 +147,10 @@ type Question @model {
 }
 
 type Subscription {
-  onUpdateJEUserByJEUserId(id: String): JEUser
-    @aws_subscribe(mutations: ["updateJEUser"])
-  onUpdateTeamByTeamId(id: String): Team
-    @aws_subscribe(mutations: ["updateTeam"])
-  onUpdateTestByTestId(id: String): Test
-    @aws_subscribe(mutations: ["updateTest"])
-  onUpdateRoomByRoomId(id: String): Room
-    @aws_subscribe(mutations: ["updateRoom"])
-  onUpdateRecordByRecordId(id: String): Record
-    @aws_subscribe(mutations: ["updateRecord"])
+  onUpdateJEUserByJEUserId(id: String): JEUser @aws_subscribe(mutations: ["updateJEUser"])
+  onUpdateTeamByTeamId(id: String): Team @aws_subscribe(mutations: ["updateTeam"])
+  onUpdateTestByTestId(id: String): Test @aws_subscribe(mutations: ["updateTest"])
+  onUpdateRoomByRoomId(id: String): Room @aws_subscribe(mutations: ["updateRoom"])
+  onUpdateRecordByRecordId(id: String): Record @aws_subscribe(mutations: ["updateRecord"])
 }
+ 

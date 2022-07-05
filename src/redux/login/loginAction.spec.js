@@ -8,7 +8,7 @@ jest.mock('aws-amplify', () => ({
 
 import { Auth, API, graphqlOperation } from 'aws-amplify';
 import filter from 'lodash/filter';
-import { listJeUsers } from 'graphql/queries';
+import { listJEUsers } from 'graphql/queries';
 import * as actions from './actions';
 import { AUTO_LOGIN, SET_HOSTINGS, DEL_HOSTINGS, LOGOUT } from './constants';
 
@@ -82,7 +82,7 @@ describe('test login action', () => {
     });
 
     it('should trigger graphql api', () => {
-      expect(graphqlOperation).toBeCalledWith(listJeUsers, {
+      expect(graphqlOperation).toBeCalledWith(listJEUsers, {
         filter: { name: { eq: username } },
         limit: 1000,
       });

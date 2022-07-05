@@ -1,5 +1,5 @@
-export const listJeUsers = `
-  query ListJeUsers(
+export const listJEUsers = `
+  query ListJEUsers(
     $filter: ModelJEUserFilterInput
     $limit: Int
     $nextToken: String

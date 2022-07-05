@@ -16,12 +16,16 @@ export const createRoom = /* GraphQL */ `
         timeEnd
         status
         tags
+        createdAt
+        updatedAt
       }
       subjectId
       description
       host {
         id
         name
+        createdAt
+        updatedAt
       }
       createTime
       password
@@ -35,7 +39,11 @@ export const createRoom = /* GraphQL */ `
         timeBegin
         timeEnd
         status
+        createdAt
+        updatedAt
       }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -54,12 +62,16 @@ export const updateRoom = /* GraphQL */ `
         timeEnd
         status
         tags
+        createdAt
+        updatedAt
       }
       subjectId
       description
       host {
         id
         name
+        createdAt
+        updatedAt
       }
       createTime
       password
@@ -73,7 +85,11 @@ export const updateRoom = /* GraphQL */ `
         timeBegin
         timeEnd
         status
+        createdAt
+        updatedAt
       }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -92,12 +108,16 @@ export const deleteRoom = /* GraphQL */ `
         timeEnd
         status
         tags
+        createdAt
+        updatedAt
       }
       subjectId
       description
       host {
         id
         name
+        createdAt
+        updatedAt
       }
       createTime
       password
@@ -111,12 +131,16 @@ export const deleteRoom = /* GraphQL */ `
         timeBegin
         timeEnd
         status
+        createdAt
+        updatedAt
       }
+      createdAt
+      updatedAt
     }
   }
 `;
-export const createJeUser = /* GraphQL */ `
-  mutation CreateJeUser(
+export const createJEUser = /* GraphQL */ `
+  mutation CreateJEUser(
     $input: CreateJEUserInput!
     $condition: ModelJEUserConditionInput
   ) {
@@ -129,11 +153,15 @@ export const createJeUser = /* GraphQL */ `
         description
         createTime
         password
+        createdAt
+        updatedAt
       }
       team {
         id
         name
         description
+        createdAt
+        updatedAt
       }
       tests {
         nextToken
@@ -146,12 +174,16 @@ export const createJeUser = /* GraphQL */ `
         timeEnd
         status
         tags
+        createdAt
+        updatedAt
       }
+      createdAt
+      updatedAt
     }
   }
 `;
-export const updateJeUser = /* GraphQL */ `
-  mutation UpdateJeUser(
+export const updateJEUser = /* GraphQL */ `
+  mutation UpdateJEUser(
     $input: UpdateJEUserInput!
     $condition: ModelJEUserConditionInput
   ) {
@@ -164,11 +196,15 @@ export const updateJeUser = /* GraphQL */ `
         description
         createTime
         password
+        createdAt
+        updatedAt
       }
       team {
         id
         name
         description
+        createdAt
+        updatedAt
       }
       tests {
         nextToken
@@ -181,12 +217,16 @@ export const updateJeUser = /* GraphQL */ `
         timeEnd
         status
         tags
+        createdAt
+        updatedAt
       }
+      createdAt
+      updatedAt
     }
   }
 `;
-export const deleteJeUser = /* GraphQL */ `
-  mutation DeleteJeUser(
+export const deleteJEUser = /* GraphQL */ `
+  mutation DeleteJEUser(
     $input: DeleteJEUserInput!
     $condition: ModelJEUserConditionInput
   ) {
@@ -199,11 +239,15 @@ export const deleteJeUser = /* GraphQL */ `
         description
         createTime
         password
+        createdAt
+        updatedAt
       }
       team {
         id
         name
         description
+        createdAt
+        updatedAt
       }
       tests {
         nextToken
@@ -216,7 +260,11 @@ export const deleteJeUser = /* GraphQL */ `
         timeEnd
         status
         tags
+        createdAt
+        updatedAt
       }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -235,6 +283,8 @@ export const createTeam = /* GraphQL */ `
       questionSet {
         nextToken
       }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -253,6 +303,8 @@ export const updateTeam = /* GraphQL */ `
       questionSet {
         nextToken
       }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -271,6 +323,8 @@ export const deleteTeam = /* GraphQL */ `
       questionSet {
         nextToken
       }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -287,11 +341,15 @@ export const createTest = /* GraphQL */ `
         description
         createTime
         password
+        createdAt
+        updatedAt
       }
       team {
         id
         name
         description
+        createdAt
+        updatedAt
       }
       subjectId
       users {
@@ -300,6 +358,8 @@ export const createTest = /* GraphQL */ `
       host {
         id
         name
+        createdAt
+        updatedAt
       }
       description
       timeBegin
@@ -312,6 +372,8 @@ export const createTest = /* GraphQL */ `
       }
       status
       tags
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -328,11 +390,15 @@ export const updateTest = /* GraphQL */ `
         description
         createTime
         password
+        createdAt
+        updatedAt
       }
       team {
         id
         name
         description
+        createdAt
+        updatedAt
       }
       subjectId
       users {
@@ -341,6 +407,8 @@ export const updateTest = /* GraphQL */ `
       host {
         id
         name
+        createdAt
+        updatedAt
       }
       description
       timeBegin
@@ -353,6 +421,8 @@ export const updateTest = /* GraphQL */ `
       }
       status
       tags
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -369,11 +439,15 @@ export const deleteTest = /* GraphQL */ `
         description
         createTime
         password
+        createdAt
+        updatedAt
       }
       team {
         id
         name
         description
+        createdAt
+        updatedAt
       }
       subjectId
       users {
@@ -382,6 +456,8 @@ export const deleteTest = /* GraphQL */ `
       host {
         id
         name
+        createdAt
+        updatedAt
       }
       description
       timeBegin
@@ -394,11 +470,13 @@ export const deleteTest = /* GraphQL */ `
       }
       status
       tags
+      createdAt
+      updatedAt
     }
   }
 `;
-export const createTestJeUser = /* GraphQL */ `
-  mutation CreateTestJeUser(
+export const createTestJEUser = /* GraphQL */ `
+  mutation CreateTestJEUser(
     $input: CreateTestJEUserInput!
     $condition: ModelTestJEUserConditionInput
   ) {
@@ -409,6 +487,8 @@ export const createTestJeUser = /* GraphQL */ `
       user {
         id
         name
+        createdAt
+        updatedAt
       }
       test {
         id
@@ -418,12 +498,16 @@ export const createTestJeUser = /* GraphQL */ `
         timeEnd
         status
         tags
+        createdAt
+        updatedAt
       }
+      createdAt
+      updatedAt
     }
   }
 `;
-export const updateTestJeUser = /* GraphQL */ `
-  mutation UpdateTestJeUser(
+export const updateTestJEUser = /* GraphQL */ `
+  mutation UpdateTestJEUser(
     $input: UpdateTestJEUserInput!
     $condition: ModelTestJEUserConditionInput
   ) {
@@ -434,6 +518,8 @@ export const updateTestJeUser = /* GraphQL */ `
       user {
         id
         name
+        createdAt
+        updatedAt
       }
       test {
         id
@@ -443,12 +529,16 @@ export const updateTestJeUser = /* GraphQL */ `
         timeEnd
         status
         tags
+        createdAt
+        updatedAt
       }
+      createdAt
+      updatedAt
     }
   }
 `;
-export const deleteTestJeUser = /* GraphQL */ `
-  mutation DeleteTestJeUser(
+export const deleteTestJEUser = /* GraphQL */ `
+  mutation DeleteTestJEUser(
     $input: DeleteTestJEUserInput!
     $condition: ModelTestJEUserConditionInput
   ) {
@@ -459,6 +549,8 @@ export const deleteTestJeUser = /* GraphQL */ `
       user {
         id
         name
+        createdAt
+        updatedAt
       }
       test {
         id
@@ -468,7 +560,11 @@ export const deleteTestJeUser = /* GraphQL */ `
         timeEnd
         status
         tags
+        createdAt
+        updatedAt
       }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -484,6 +580,8 @@ export const createRecord = /* GraphQL */ `
       interviewer {
         id
         name
+        createdAt
+        updatedAt
       }
       timeBegin
       timeEnd
@@ -506,6 +604,8 @@ export const createRecord = /* GraphQL */ `
         name
         content
         test
+        createdAt
+        updatedAt
       }
       test {
         id
@@ -515,6 +615,8 @@ export const createRecord = /* GraphQL */ `
         timeEnd
         status
         tags
+        createdAt
+        updatedAt
       }
       room {
         id
@@ -522,7 +624,11 @@ export const createRecord = /* GraphQL */ `
         description
         createTime
         password
+        createdAt
+        updatedAt
       }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -538,6 +644,8 @@ export const updateRecord = /* GraphQL */ `
       interviewer {
         id
         name
+        createdAt
+        updatedAt
       }
       timeBegin
       timeEnd
@@ -560,6 +668,8 @@ export const updateRecord = /* GraphQL */ `
         name
         content
         test
+        createdAt
+        updatedAt
       }
       test {
         id
@@ -569,6 +679,8 @@ export const updateRecord = /* GraphQL */ `
         timeEnd
         status
         tags
+        createdAt
+        updatedAt
       }
       room {
         id
@@ -576,7 +688,11 @@ export const updateRecord = /* GraphQL */ `
         description
         createTime
         password
+        createdAt
+        updatedAt
       }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -592,6 +708,8 @@ export const deleteRecord = /* GraphQL */ `
       interviewer {
         id
         name
+        createdAt
+        updatedAt
       }
       timeBegin
       timeEnd
@@ -614,6 +732,8 @@ export const deleteRecord = /* GraphQL */ `
         name
         content
         test
+        createdAt
+        updatedAt
       }
       test {
         id
@@ -623,6 +743,8 @@ export const deleteRecord = /* GraphQL */ `
         timeEnd
         status
         tags
+        createdAt
+        updatedAt
       }
       room {
         id
@@ -630,7 +752,11 @@ export const deleteRecord = /* GraphQL */ `
         description
         createTime
         password
+        createdAt
+        updatedAt
       }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -640,6 +766,7 @@ export const createResult = /* GraphQL */ `
     $condition: ModelResultConditionInput
   ) {
     createResult(input: $input, condition: $condition) {
+      id
       logic
       language
       workwith
@@ -655,8 +782,12 @@ export const createResult = /* GraphQL */ `
         timeEnd
         status
         tags
+        createdAt
+        updatedAt
       }
       time
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -666,6 +797,7 @@ export const updateResult = /* GraphQL */ `
     $condition: ModelResultConditionInput
   ) {
     updateResult(input: $input, condition: $condition) {
+      id
       logic
       language
       workwith
@@ -681,8 +813,12 @@ export const updateResult = /* GraphQL */ `
         timeEnd
         status
         tags
+        createdAt
+        updatedAt
       }
       time
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -692,6 +828,7 @@ export const deleteResult = /* GraphQL */ `
     $condition: ModelResultConditionInput
   ) {
     deleteResult(input: $input, condition: $condition) {
+      id
       logic
       language
       workwith
@@ -707,8 +844,12 @@ export const deleteResult = /* GraphQL */ `
         timeEnd
         status
         tags
+        createdAt
+        updatedAt
       }
       time
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -718,6 +859,7 @@ export const createComment = /* GraphQL */ `
     $condition: ModelCommentConditionInput
   ) {
     createComment(input: $input, condition: $condition) {
+      id
       author
       time
       content
@@ -732,7 +874,11 @@ export const createComment = /* GraphQL */ `
         timeBegin
         timeEnd
         status
+        createdAt
+        updatedAt
       }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -742,6 +888,7 @@ export const updateComment = /* GraphQL */ `
     $condition: ModelCommentConditionInput
   ) {
     updateComment(input: $input, condition: $condition) {
+      id
       author
       time
       content
@@ -756,7 +903,11 @@ export const updateComment = /* GraphQL */ `
         timeBegin
         timeEnd
         status
+        createdAt
+        updatedAt
       }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -766,6 +917,7 @@ export const deleteComment = /* GraphQL */ `
     $condition: ModelCommentConditionInput
   ) {
     deleteComment(input: $input, condition: $condition) {
+      id
       author
       time
       content
@@ -780,7 +932,11 @@ export const deleteComment = /* GraphQL */ `
         timeBegin
         timeEnd
         status
+        createdAt
+        updatedAt
       }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -800,10 +956,14 @@ export const createHistory = /* GraphQL */ `
         timeBegin
         timeEnd
         status
+        createdAt
+        updatedAt
       }
       snapComments {
         nextToken
       }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -823,10 +983,14 @@ export const updateHistory = /* GraphQL */ `
         timeBegin
         timeEnd
         status
+        createdAt
+        updatedAt
       }
       snapComments {
         nextToken
       }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -846,10 +1010,14 @@ export const deleteHistory = /* GraphQL */ `
         timeBegin
         timeEnd
         status
+        createdAt
+        updatedAt
       }
       snapComments {
         nextToken
       }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -867,7 +1035,11 @@ export const createSnapComment = /* GraphQL */ `
         id
         time
         code
+        createdAt
+        updatedAt
       }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -885,7 +1057,11 @@ export const updateSnapComment = /* GraphQL */ `
         id
         time
         code
+        createdAt
+        updatedAt
       }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -903,7 +1079,11 @@ export const deleteSnapComment = /* GraphQL */ `
         id
         time
         code
+        createdAt
+        updatedAt
       }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -925,7 +1105,11 @@ export const createQuestionSnapshot = /* GraphQL */ `
         timeBegin
         timeEnd
         status
+        createdAt
+        updatedAt
       }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -947,7 +1131,11 @@ export const updateQuestionSnapshot = /* GraphQL */ `
         timeBegin
         timeEnd
         status
+        createdAt
+        updatedAt
       }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -969,7 +1157,11 @@ export const deleteQuestionSnapshot = /* GraphQL */ `
         timeBegin
         timeEnd
         status
+        createdAt
+        updatedAt
       }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -984,6 +1176,8 @@ export const createQuestionSet = /* GraphQL */ `
         id
         name
         description
+        createdAt
+        updatedAt
       }
       questions {
         nextToken
@@ -991,6 +1185,8 @@ export const createQuestionSet = /* GraphQL */ `
       name
       description
       tags
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -1005,6 +1201,8 @@ export const updateQuestionSet = /* GraphQL */ `
         id
         name
         description
+        createdAt
+        updatedAt
       }
       questions {
         nextToken
@@ -1012,6 +1210,8 @@ export const updateQuestionSet = /* GraphQL */ `
       name
       description
       tags
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -1026,6 +1226,8 @@ export const deleteQuestionSet = /* GraphQL */ `
         id
         name
         description
+        createdAt
+        updatedAt
       }
       questions {
         nextToken
@@ -1033,6 +1235,8 @@ export const deleteQuestionSet = /* GraphQL */ `
       name
       description
       tags
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -1049,11 +1253,15 @@ export const createQuestion = /* GraphQL */ `
         name
         description
         tags
+        createdAt
+        updatedAt
       }
       name
       content
       test
       tags
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -1070,11 +1278,15 @@ export const updateQuestion = /* GraphQL */ `
         name
         description
         tags
+        createdAt
+        updatedAt
       }
       name
       content
       test
       tags
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -1091,11 +1303,15 @@ export const deleteQuestion = /* GraphQL */ `
         name
         description
         tags
+        createdAt
+        updatedAt
       }
       name
       content
       test
       tags
+      createdAt
+      updatedAt
     }
   }
 `;

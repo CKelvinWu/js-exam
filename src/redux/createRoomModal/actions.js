@@ -60,7 +60,7 @@ export function createRoom(data) {
       );
 
       await API.graphql(
-        graphqlOperation(mutations.createTestJeUser, {
+        graphqlOperation(mutations.createTestJEUser, {
           input: {
             userID: jeUser.id,
             testID: testData.createTest.id,
@@ -69,7 +69,7 @@ export function createRoom(data) {
       );
 
       await API.graphql(
-        graphqlOperation(mutations.updateJeUser, {
+        graphqlOperation(mutations.updateJEUser, {
           input: {
             id: jeUser.id,
             jEUserRoomId: roomData.createRoom.id,

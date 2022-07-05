@@ -122,7 +122,7 @@ function setTestInterviewer(testID, userID) {
     );
     try {
       await API.graphql(
-        graphqlOperation(mutations.createTestJeUser, {
+        graphqlOperation(mutations.createTestJEUser, {
           input: { testID, userID },
         }),
       );

@@ -1,11 +1,12 @@
 {
-    "AppSyncApiName": "jsexam2020",
-    "DynamoDBBillingMode": "PAY_PER_REQUEST",
-    "DynamoDBEnableServerSideEncryption": "false",
-    "AuthCognitoUserPoolId": {
-        "Fn::GetAtt": [
-            "authjsexam6d4f91c1",
-            "Outputs.UserPoolId"
-        ]
-    }
+  "AppSyncApiName": "jsexam2020",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": "false",
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authjsexam6d4f91c1",
+      "Outputs.UserPoolId"
+    ]
+  },
+  "AuthModeLastUpdated": "2022-06-30T08:31:28.333Z"
 }

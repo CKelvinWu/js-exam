@@ -22,5 +22,4 @@ Amplify.configure(awsConfig);
 const initialState = {};
 const store = configureStore(initialState);
 const MOUNT_NODE = document.getElementById('root');
-
 ReactDOM.render(<Provider store={store}>{<Route />}</Provider>, MOUNT_NODE);
