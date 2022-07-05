@@ -86,4 +86,4 @@ https://eyesofkids.gitbooks.io/react-basic-zh-tw/content/day27_redux_ex3/ give s
 https://v5.reactrouter.com/web/guides/quick-start 
 
 ### Step 4 - Deployment
-After the amplify init is finished, type `npm deploy`
+After the amplify init is finished, type  `npm build` then `npm deploy`
