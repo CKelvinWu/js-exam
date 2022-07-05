@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import Amplify from 'aws-amplify';
-//import awsConfig from 'backend-aws-exports/dev/aws-exports';
 import awsConfig from 'aws-exports';
 
 import 'antd/dist/antd.css';
