@@ -77,7 +77,7 @@ v0.1.0
 ### Step 3- if init with error:
 1. Go to the amplify -> CloudFormation->delete all the Stacks with status: "UPDATED Failed"
 2. Then redo the `amplify init`
-3. your `team-provider-info.json` shoud be updated with `app_id`
+3. your `team-provider-info.json` shoud be updated with `app_id` with the Amplify Studio app id
 4. If you are a complete new user of Amplify, following guide maybe helpful:
 
 https://aws.amazon.com/tw/blogs/mobile/restoring-aws-amplify-project-after-deleting-it-from-the-cloud/
