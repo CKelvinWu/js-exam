@@ -13,7 +13,7 @@ install `node.js`
 ## Installing
 
 `npm install`
-
+make sure the aws-exports is in src folder
 
 ## Usage
 ### Running the platform
@@ -53,6 +53,7 @@ v0.1.0
 ### Step 1. Install Amplify-cli
 
 1. Run the command `npm i -g @aws-amplify/cli@4.13.1` (Install [nvm](https://github.com/nvm-sh/nvm) if you have trouble with installing package globally) if not working please install amplify cli updated by npm i -g @aws-amplify/cli
+
 2. Run the command `amplify` and make sure it will show usage information
 
 ### Step 2. Setup Local Config
@@ -86,4 +87,6 @@ https://eyesofkids.gitbooks.io/react-basic-zh-tw/content/day27_redux_ex3/ give s
 https://v5.reactrouter.com/web/guides/quick-start 
 
 ### Step 4 - Deployment
-After the amplify init is finished, type  `npm build` then `npm deploy`
+1. After the amplify init is finished, type  `npm build` 
+2. then type  `npm deploy`
+2.1 NOTICE: if the `npm deploy` has fatal: remote hang up error , try it in other network environment (i.g personal hotspot)
