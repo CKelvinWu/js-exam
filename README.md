@@ -13,7 +13,7 @@ install `node.js`
 ## Installing
 
 `npm install`
-make sure the aws-exports is in src folder
+make sure the aws-exports is in `src` folder
 
 ## Usage
 ### Running the platform
