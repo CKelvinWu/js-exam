@@ -89,4 +89,4 @@ https://v5.reactrouter.com/web/guides/quick-start
 ### Step 4 - Deployment
 1. After the amplify init is finished, type  `npm build` 
 2. then type  `npm deploy`
-2.1 NOTICE: if the `npm deploy` has fatal: remote hang up error , try it in other network environment (i.g personal hotspot)
+--2.1 NOTICE: if the `npm deploy` has fatal: remote hang up error , try it in other network environment (i.g personal hotspot)
