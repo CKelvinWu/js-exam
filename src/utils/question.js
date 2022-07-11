@@ -65,23 +65,23 @@ const getQuestion = async id => {
 };
 
 const updateQuestion = async data => {
-  const { id, content, test, tags, name } = data;
+  const { id, name, content, test, tags } = data;
   const params = {
     input: {
       id,
+      name,
       content,
       test,
       tags,
-      name,
     },
   };
   const query = `mutation UpdateQuestion($input: UpdateQuestionInput!) {
     updateQuestion(input: $input) {
       id
+      name
       content
       test
       tags
-      name
     }
   }`;
   const result = await API.graphql(graphqlOperation(query, params));
