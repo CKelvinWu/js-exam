@@ -18,18 +18,19 @@ v0.1.0
 - Ant design
 
 
-## Prerequisites
 
 ### Prerequisite
-1. * Node.js version <=12.0
+1. Node.js version <=12.0
 Install nvm to install a specific version of node (Install [nvm](https://github.com/nvm-sh/nvm))
 If you use nvm to install the node.js you can type `nvm install version` i.g `nvm insall 11.0.0` 
 
-2.  Make sure you have the AWS creditial with accesskey and key_id. 
-	It can be found in IAM->Users->amplify->Security credentials->Create access key( if it's in gray, please ask your manager to delete someone's key  and press create a id ). You will find the access_key and key_id in a csv file 
-![Screen Shot 2022-07-11 at 10 57 27 AM](https://user-images.githubusercontent.com/56998170/178195037-40b35648-2ed7-4384-82e1-1fd1487d27d8.png)
+2.  Make sure you have the AWS creditial with `access_key` and `key_id`. 
+	It can be found in IAM->Users->Amplify->Security credentials->Create access key( if it's in gray, please ask your manager to delete someone's key  and press create access id ). You will find the `access_key` and `key_id` in a csv file 
 
-    You can also ask your team member if they have the credential info, usally stored as an `.aws` folder, so you do not need to re-create one, keep the access_key and key_id secretly.  
+![Screen Shot 2022-07-11 at 10 57 27 AM](https://user-images.githubusercontent.com/56998170/178196138-66a0cfa5-0c87-493c-bfb6-85dc925f5b82.png)
+
+3. You can also ask your team member whether they have the credential info, usally stored as an `.aws` folder, so you do not need to click the Create Access Key, keep the access_key and key_id secretly.  
+4. Please confirm you have setup the SSH, guide :https://docs.github.com/en/authentication/connecting-to-github-with-ssh
 
 
 
@@ -54,7 +55,7 @@ If you use nvm to install the node.js you can type `nvm install version` i.g `nv
 
 1. If you have the `.aws` folder, put whole folder into user directory (`echo $HOME` will display actual path)
 2. If you and your teamates does not have the .aws folder in your user directory, then run `aws configure`
-it will require your key_id and access_key and make an .aws folder with credential info stored in your user directory. 
+it will require your `key_id` and `access_key` and make an `.aws` folder with credential info stored in your user directory. 
 ![Screen Shot 2022-07-11 at 11 10 04 AM](https://user-images.githubusercontent.com/56998170/178195340-afda586f-43ed-45db-b862-bfc970a0ebfe.png)
 
 
@@ -82,7 +83,7 @@ it will require your key_id and access_key and make an .aws folder with credenti
 ### Step 4 - Deployment
 1. After the amplify init is finished, type  `npm build` 
 2. then type  `npm deploy`
-    2.1 NOTICE: if the `npm deploy` has fatal: remote hang up error , try it in other network environment (i.g personal hotspot)
+NOTICE: if the `npm deploy` has fatal: remote hang up error , try it in other network environment (i.g personal hotspot)
 
 
 ## Usage
