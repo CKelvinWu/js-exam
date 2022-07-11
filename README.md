@@ -27,7 +27,8 @@ If you use nvm to install the node.js you can type `nvm install version` i.g `nv
 
 2.  Make sure you have the AWS creditial with accesskey and key_id. 
 	It can be found in IAM->Users->amplify->Security credentials->Create access key( if it's in gray, please ask your manager to delete someone's key  and press create a id ). You will find the access_key and key_id in a csv file 
-![](2022-07-11-10-57-53.png)
+![Screen Shot 2022-07-11 at 10 57 27 AM](https://user-images.githubusercontent.com/56998170/178195037-40b35648-2ed7-4384-82e1-1fd1487d27d8.png)
+
     You can also ask your team member if they have the credential info, usally stored as an `.aws` folder, so you do not need to re-create one, keep the access_key and key_id secretly.  
 
 
@@ -45,7 +46,8 @@ If you use nvm to install the node.js you can type `nvm install version` i.g `nv
 1. Run the command `npm i -g @aws-amplify/cli@4.13.1`  if not working please install amplify cli updated by `npm i -g @aws-amplify/cli` 
 
 2. Run the command `amplify` and make sure it will show usage information
-![](2022-07-11-11-07-45.png)
+![Screen Shot 2022-07-11 at 11 07 28 AM](https://user-images.githubusercontent.com/56998170/178195305-b7fc1c35-5004-4c51-981b-aea4bc357844.png)
+
 ### Step 2. Setup Local Config
 
 **Amplify will scan your user directory and check `.aws` folder for authentication.**
@@ -53,8 +55,8 @@ If you use nvm to install the node.js you can type `nvm install version` i.g `nv
 1. If you have the `.aws` folder, put whole folder into user directory (`echo $HOME` will display actual path)
 2. If you and your teamates does not have the .aws folder in your user directory, then run `aws configure`
 it will require your key_id and access_key and make an .aws folder with credential info stored in your user directory. 
+![Screen Shot 2022-07-11 at 11 10 04 AM](https://user-images.githubusercontent.com/56998170/178195340-afda586f-43ed-45db-b862-bfc970a0ebfe.png)
 
-![](2022-07-11-11-10-21.png)
 
 ### Step 3. Init project
 
@@ -68,11 +70,13 @@ it will require your key_id and access_key and make an .aws folder with credenti
 3. If success you'll see the follow message: `Your project has been successfully initialized and connected to the cloud!` :tada::tada::tada:
 
 ### Step 3- if init with error:
-1. Go to the amplify -> CloudFormation->delete all the Stacks with status: "UPDATED Failed" ![](2022-07-11-11-28-46.png)
+1. Go to the amplify -> CloudFormation->delete all the Stacks with status: "UPDATED Failed" ![Screen Shot 2022-07-11 at 11 26 04 AM](https://user-images.githubusercontent.com/56998170/178195419-0ee18af3-f908-42c7-b35e-45d11a0362b2.png)
+
 
 2. Then redo the `amplify init` 
 3. your `app_id` in `team-provider-info.json` shoud be updated with  with the Amplify Studio app_id(can be found in amplify->edit_backend)
-![](2022-07-11-11-39-13.png)
+![Screen Shot 2022-07-11 at 11 37 33 AM](https://user-images.githubusercontent.com/56998170/178195560-eb265ffd-3918-490b-a739-9145fd083a47.png)
+
 4. After you finish all the setup you can run `npm start` to see if the app working on localhost
 
 ### Step 4 - Deployment
