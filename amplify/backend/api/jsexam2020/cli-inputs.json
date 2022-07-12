@@ -6,13 +6,9 @@
       "mode": "AMAZON_COGNITO_USER_POOLS",
       "cognitoUserPoolId": "authjsexam6d4f91c1"
     },
-    "conflictResolution": {
-      "defaultResolutionStrategy": {
-        "type": "AUTOMERGE"
-      }
-    },
+    "conflictResolution": {},
     "apiName": "jsexam2020",
-    "gqlSchemaPath": "/tmp/amplify-fcb87a28-fdc6-42d7-abc4-43ec13b0c2eb/amplify/backend/api/jsexam2020/schema.graphql",
+    "gqlSchemaPath": "/Users/johnny.wu/js-exam-2022-deploy/amplify/backend/api/jsexam2020/schema.graphql",
     "additionalAuthTypes": [
       {
         "mode": "AWS_IAM"
