@@ -43,6 +43,7 @@
     "@babel/standalone": "^7.1.0",
     "@sentry/browser": "^4.3.0",
     "antd": "^3.12.4",
+    "aws": "0.0.3-2",
     "aws-amplify": "^1.1.9",
     "aws-amplify-react": "^2.1.3",
     "blueimp-md5": "^2.10.0",

@@ -16,5 +16,23 @@
         "jsexam6d4f91c1": {}
       }
     }
+  },
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-js-exam-dev-95523-authRole",
+      "UnauthRoleArn": "arn:aws:iam::602307824922:role/amplify-js-exam-dev-95523-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::602307824922:role/amplify-js-exam-dev-95523-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-js-exam-dev-95523-deployment",
+      "UnauthRoleName": "amplify-js-exam-dev-95523-unauthRole",
+      "StackName": "amplify-js-exam-dev-95523",
+      "StackId": "arn:aws:cloudformation:us-east-1:602307824922:stack/amplify-js-exam-dev-95523/ded99720-024e-11ed-b9a8-12e02f029fd3",
+      "AmplifyAppId": "d2f94o2tmijd4y"
+    },
+    "categories": {
+      "auth": {
+        "jsexam6d4f91c1": {}
+      }
+    }
   }
 }
