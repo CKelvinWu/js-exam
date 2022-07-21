@@ -217,6 +217,7 @@ class Playback extends React.Component {
           />
           <Summary
             summaryList={record.comment.items}
+            summaryid={record}
             visible={summaryVisible}
             onCancel={() => {
               this.setState({ summaryVisible: false });

@@ -26,20 +26,19 @@ class QuestionComment extends React.Component {
                     <h4 style={{ display: 'inline' }}> Code quality </h4>
                   </Col>
                   <Col span={8}>
-                    <Rate disabled value={comment.quality} />
+                    <Rate value={comment.quality} />
                   </Col>
                   <Col span={4} offset={11}>
                     <h4 style={{ display: 'inline' }}> Compeleteness </h4>
                   </Col>
                   <Col span={8}>
-                    <Rate disabled value={comment.completeness} />
+                    <Rate value={comment.completeness} />
                   </Col>
                   <Col span={4} offset={11}>
                     <h4 style={{ display: 'inline' }}> How much hints </h4>
                   </Col>
                   <Col span={8}>
                     <Rate
-                      disabled
                       value={comment.hint}
                       character={<Icon type="bulb" theme="filled" />}
                       style={{ color: 'grey' }}

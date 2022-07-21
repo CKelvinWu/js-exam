@@ -118,7 +118,7 @@ const InterviewSummaryModal = props => (
                                   }}
                                 >
                                   <h4 style={{ width: '49%' }}>Logic</h4>
-                                  <Rate value={summary.logic} disabled />
+                                  <Rate value={summary.logic} />
                                 </div>
                                 <div
                                   style={{
@@ -129,7 +129,7 @@ const InterviewSummaryModal = props => (
                                   <h4 style={{ width: '49%' }}>
                                     JavaScript Familiarity
                                   </h4>
-                                  <Rate value={summary.language} disabled />
+                                  <Rate value={summary.language} />
                                 </div>
                                 <Card type="inner">
                                   <p>{summary.techreview}</p>
@@ -149,7 +149,7 @@ const InterviewSummaryModal = props => (
                                   <h4 style={{ width: '49%' }}>
                                     Good to work with
                                   </h4>
-                                  <Rate value={summary.workwith} disabled />
+                                  <Rate value={summary.workwith} />
                                 </div>
                                 <Card type="inner">
                                   <p>{summary.perstyreview}</p>
