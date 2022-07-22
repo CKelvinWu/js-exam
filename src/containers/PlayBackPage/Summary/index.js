@@ -1,6 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Comment, Avatar, List, Rate, Icon, Row, Col } from 'antd';
+import {
+  Modal,
+  Comment,
+  Avatar,
+  List,
+  Rate,
+  Icon,
+  Row,
+  Col,
+  Input,
+  Button,
+  Form,
+  message,
+} from 'antd';
 
 import { rateDesc, hintDesc } from './constant';
 import { API, graphqlOperation } from 'aws-amplify';
@@ -19,7 +32,7 @@ const Summary = ({ summaryList, visible, onCancel, summaryid }) => (
     )}
   </Modal>
 );
-
+let new_comment = '';
 const SummaryList = ({ data, itid }) => (
   <List
     itemLayout="horizontal"
@@ -269,20 +282,95 @@ const SummaryList = ({ data, itid }) => (
           author={item.author}
           content={item.content}
           avatar={<Avatar>{item.author[0].toUpperCase()}</Avatar>}
-          onChange={async newValue => {
-            console.log(item, newValue);
-            const new_params = item;
-            new_params.content = newValue;
-            console.log(new_params);
+        />
+
+        <Form
+          onSubmit={async newValue => {
+            let {
+              id,
+              author,
+              completeness,
+              content,
+              hint,
+              quality,
+              time,
+            } = item;
+            content = new_comment;
+            const searchid = itid.comment.items[0].time;
+            const listq = `query {
+                  listComments (
+                    filter: {
+                      time:{
+                        eq:"${searchid}"
+                      }
+                    }
+            
+                  ) {
+                    items {
+                      id,
+                      content,
+                      time
+                    }
+                  }
+                }`;
+            /////
+            try {
+              const result = await API.graphql(graphqlOperation(listq));
+              //console.log(result.data.listComments.items[0].id)
+              id = result.data.listComments.items[0].id;
+            } catch (e) {
+              throw e;
+            }
+
+            /////
+            const new_params = {
+              input: {
+                id,
+                author,
+                completeness,
+                content,
+                hint,
+                quality,
+                time,
+              },
+            };
+
+            const query = `mutation UpdateComment($input: UpdateCommentInput!) {
+                updateComment(input: $input) {
+                  id
+                  author
+                  completeness
+                  content
+                  hint
+                  quality
+                  time
+                }
+              }`;
             try {
               const { data } = await API.graphql(
-                graphqlOperation(updateComment, new_params),
+                graphqlOperation(query, new_params),
               );
+              console.log('successful');
+              message.success('Edit Summary successfully');
+              window.location.reload();
             } catch (e) {
               throw e;
             }
           }}
-        />
+        >
+          <label>
+            If you have new comment please write here:
+            <input
+              placeholder={item.content}
+              type="text"
+              onChange={new_val => {
+                new_comment = new_val.target.value;
+                //console.log(new_comment)
+              }}
+            />
+          </label>
+          <input type="submit" value="Submit" />
+        </Form>
       </React.Fragment>
     )}
   />
