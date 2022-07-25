@@ -17,8 +17,86 @@ import {
 
 import { rateDesc, hintDesc } from './constant';
 import { API, graphqlOperation } from 'aws-amplify';
-import { createResult, updateComment } from 'graphql/mutations';
-import { listComments } from 'graphql/queries';
+import { get, update } from 'lodash';
+
+const get_commentid = async commenttime => {
+  const listq = `query {
+    listComments (
+      filter: {
+        time:{
+          eq:"${commenttime}"
+        }
+      }
+
+    ) {
+      items {
+        id,
+        content,
+        time
+      }
+    }
+  }`;
+  /////
+  try {
+    const result = await API.graphql(graphqlOperation(listq));
+    //console.log(result.data.listComments.items[0].id)
+    const id = result.data.listComments.items[0].id;
+    console.log(id);
+    return id;
+  } catch (e) {
+    throw e;
+  }
+};
+
+const updateComment = async (newValue, timeid, item, type) => {
+  let { id, author, completeness, content, hint, quality, time } = item;
+  if (type == 'quality') {
+    quality = newValue;
+  }
+  if (type == 'completness') {
+    completeness = newValue;
+  }
+  if (type == 'hint') {
+    hint = newValue;
+  }
+  if (type == 'comment') {
+    content = newValue;
+  }
+
+  const searchid = timeid.comment.items[0].time;
+  id = await get_commentid(searchid);
+
+  /////
+  const new_params = {
+    input: {
+      id,
+      author,
+      completeness,
+      content,
+      hint,
+      quality,
+      time,
+    },
+  };
+
+  const query = `mutation UpdateComment($input: UpdateCommentInput!) {
+  updateComment(input: $input) {
+    id
+    author
+    completeness
+    content
+    hint
+    quality
+    time
+  }
+}`;
+  try {
+    const { data } = await API.graphql(graphqlOperation(query, new_params));
+    console.log('successful');
+  } catch (e) {
+    throw e;
+  }
+};
 
 const Summary = ({ summaryList, visible, onCancel, summaryid }) => (
   <Modal
@@ -45,75 +123,8 @@ const SummaryList = ({ data, itid }) => (
             <Rate
               tooltips={rateDesc}
               value={item.quality}
-              onChange={async newValue => {
-                let {
-                  id,
-                  author,
-                  completeness,
-                  content,
-                  hint,
-                  quality,
-                  time,
-                } = item;
-                quality = newValue;
-                const searchid = itid.comment.items[0].time;
-                const listq = `query {
-                  listComments (
-                    filter: {
-                      time:{
-                        eq:"${searchid}"
-                      }
-                    }
-            
-                  ) {
-                    items {
-                      id,
-                      content,
-                      time
-                    }
-                  }
-                }`;
-                /////
-                try {
-                  const result = await API.graphql(graphqlOperation(listq));
-                  //console.log(result.data.listComments.items[0].id)
-                  id = result.data.listComments.items[0].id;
-                } catch (e) {
-                  throw e;
-                }
-
-                /////
-                const new_params = {
-                  input: {
-                    id,
-                    author,
-                    completeness,
-                    content,
-                    hint,
-                    quality,
-                    time,
-                  },
-                };
-
-                const query = `mutation UpdateComment($input: UpdateCommentInput!) {
-                updateComment(input: $input) {
-                  id
-                  author
-                  completeness
-                  content
-                  hint
-                  quality
-                  time
-                }
-              }`;
-                try {
-                  const { data } = await API.graphql(
-                    graphqlOperation(query, new_params),
-                  );
-                  console.log('successful');
-                } catch (e) {
-                  throw e;
-                }
+              onChange={newValue => {
+                updateComment(newValue, itid, item, 'quality');
               }}
             />
           </Col>
@@ -124,75 +135,8 @@ const SummaryList = ({ data, itid }) => (
             <Rate
               tooltips={rateDesc}
               value={item.completeness}
-              onChange={async newValue => {
-                let {
-                  id,
-                  author,
-                  completeness,
-                  content,
-                  hint,
-                  quality,
-                  time,
-                } = item;
-                completeness = newValue;
-                const searchid = itid.comment.items[0].time;
-                const listq = `query {
-                  listComments (
-                    filter: {
-                      time:{
-                        eq:"${searchid}"
-                      }
-                    }
-            
-                  ) {
-                    items {
-                      id,
-                      content,
-                      time
-                    }
-                  }
-                }`;
-                /////
-                try {
-                  const result = await API.graphql(graphqlOperation(listq));
-                  //console.log(result.data.listComments.items[0].id)
-                  id = result.data.listComments.items[0].id;
-                } catch (e) {
-                  throw e;
-                }
-
-                /////
-                const new_params = {
-                  input: {
-                    id,
-                    author,
-                    completeness,
-                    content,
-                    hint,
-                    quality,
-                    time,
-                  },
-                };
-
-                const query = `mutation UpdateComment($input: UpdateCommentInput!) {
-                updateComment(input: $input) {
-                  id
-                  author
-                  completeness
-                  content
-                  hint
-                  quality
-                  time
-                }
-              }`;
-                try {
-                  const { data } = await API.graphql(
-                    graphqlOperation(query, new_params),
-                  );
-                  console.log('successful');
-                } catch (e) {
-                  throw e;
-                }
+              onChange={newValue => {
+                updateComment(newValue, itid, item, 'completness');
               }}
             />
           </Col>
@@ -205,75 +149,8 @@ const SummaryList = ({ data, itid }) => (
               style={{ color: 'grey' }}
               tooltips={hintDesc}
               value={item.hint}
-              onChange={async newValue => {
-                let {
-                  id,
-                  author,
-                  completeness,
-                  content,
-                  hint,
-                  quality,
-                  time,
-                } = item;
-                quality = newValue;
-                const searchid = itid.comment.items[0].time;
-                const listq = `query {
-                    listComments (
-                      filter: {
-                        time:{
-                          eq:"${searchid}"
-                        }
-                      }
-              
-                    ) {
-                      items {
-                        id,
-                        content,
-                        time
-                      }
-                    }
-                  }`;
-                /////
-                try {
-                  const result = await API.graphql(graphqlOperation(listq));
-                  //console.log(result.data.listComments.items[0].id)
-                  id = result.data.listComments.items[0].id;
-                } catch (e) {
-                  throw e;
-                }
-
-                /////
-                const new_params = {
-                  input: {
-                    id,
-                    author,
-                    completeness,
-                    content,
-                    hint,
-                    quality,
-                    time,
-                  },
-                };
-
-                const query = `mutation UpdateComment($input: UpdateCommentInput!) {
-                  updateComment(input: $input) {
-                    id
-                    author
-                    completeness
-                    content
-                    hint
-                    quality
-                    time
-                  }
-                }`;
-                try {
-                  const { data } = await API.graphql(
-                    graphqlOperation(query, new_params),
-                  );
-                  console.log('successful');
-                } catch (e) {
-                  throw e;
-                }
+              onChange={newValue => {
+                updateComment(newValue, itid, item, 'hint');
               }}
             />
           </Col>
@@ -285,77 +162,8 @@ const SummaryList = ({ data, itid }) => (
         />
 
         <Form
-          onSubmit={async newValue => {
-            let {
-              id,
-              author,
-              completeness,
-              content,
-              hint,
-              quality,
-              time,
-            } = item;
-            content = new_comment;
-            const searchid = itid.comment.items[0].time;
-            const listq = `query {
-                  listComments (
-                    filter: {
-                      time:{
-                        eq:"${searchid}"
-                      }
-                    }
-            
-                  ) {
-                    items {
-                      id,
-                      content,
-                      time
-                    }
-                  }
-                }`;
-            /////
-            try {
-              const result = await API.graphql(graphqlOperation(listq));
-              //console.log(result.data.listComments.items[0].id)
-              id = result.data.listComments.items[0].id;
-            } catch (e) {
-              throw e;
-            }
-
-            /////
-            const new_params = {
-              input: {
-                id,
-                author,
-                completeness,
-                content,
-                hint,
-                quality,
-                time,
-              },
-            };
-
-            const query = `mutation UpdateComment($input: UpdateCommentInput!) {
-                updateComment(input: $input) {
-                  id
-                  author
-                  completeness
-                  content
-                  hint
-                  quality
-                  time
-                }
-              }`;
-            try {
-              const { data } = await API.graphql(
-                graphqlOperation(query, new_params),
-              );
-              console.log('successful');
-              message.success('Edit Summary successfully');
-              window.location.reload();
-            } catch (e) {
-              throw e;
-            }
+          onSubmit={newValue => {
+            updateComment(new_comment, itid, item, 'comment');
           }}
         >
           <label>
