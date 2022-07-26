@@ -10,6 +10,7 @@ import { onCreateResult } from 'graphql/subscriptions';
 import { getTest } from './queries';
 
 const toInterviewResult = data => {
+  console.log(data.users.items);
   const interviewers = data.users.items.map(v => v.user);
   const questions = data.records.items.map(v => ({
     id: v.id,
@@ -58,7 +59,9 @@ const InterviewSummaryModal = props => (
         let comments = [];
         let summaries = [];
         if (data && !loading && !error) {
+          console.log(data);
           const interviewResult = toInterviewResult(test);
+          console.log('this is result', interviewResult);
           interviewers = interviewResult.interviewers;
           questions = interviewResult.questions;
           comments = interviewResult.comments;
