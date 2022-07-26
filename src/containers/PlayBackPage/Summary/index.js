@@ -125,6 +125,7 @@ const SummaryList = ({ data, itid }) => (
               value={item.quality}
               onChange={newValue => {
                 updateComment(newValue, itid, item, 'quality');
+                item.quality = newValue;
               }}
             />
           </Col>
@@ -137,6 +138,7 @@ const SummaryList = ({ data, itid }) => (
               value={item.completeness}
               onChange={newValue => {
                 updateComment(newValue, itid, item, 'completness');
+                item.completeness = newValue;
               }}
             />
           </Col>
@@ -151,6 +153,7 @@ const SummaryList = ({ data, itid }) => (
               value={item.hint}
               onChange={newValue => {
                 updateComment(newValue, itid, item, 'hint');
+                item.hint = newValue;
               }}
             />
           </Col>
@@ -164,6 +167,7 @@ const SummaryList = ({ data, itid }) => (
         <Form
           onSubmit={newValue => {
             updateComment(new_comment, itid, item, 'comment');
+            item.content = new_comment;
           }}
         >
           <label>
