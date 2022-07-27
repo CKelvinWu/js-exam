@@ -302,7 +302,7 @@ class Page extends Component {
             data.status === RECORD_STATUS.closed &&
             this.props.record.status !== RECORD_STATUS.closed
           ) {
-            this.setCommentBox();
+            //this.setCommentBox();
           }
 
           this.props.actions.setCurrentRecord(data);

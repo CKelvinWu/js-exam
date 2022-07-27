@@ -1,23 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  Modal,
-  Comment,
-  Avatar,
-  List,
-  Rate,
-  Icon,
-  Row,
-  Col,
-  Input,
-  Button,
-  Form,
-  message,
-} from 'antd';
+import { Modal, Comment, Avatar, List, Rate, Icon, Row, Col, Form } from 'antd';
 
 import { rateDesc, hintDesc } from './constant';
 import { API, graphqlOperation } from 'aws-amplify';
-import { get, update } from 'lodash';
+//import { get, update } from 'lodash';
 
 const get_commentid = async commenttime => {
   const listq = `query {
@@ -50,16 +37,16 @@ const get_commentid = async commenttime => {
 
 const updateComment = async (newValue, timeid, item, type) => {
   let { id, author, completeness, content, hint, quality, time } = item;
-  if (type == 'quality') {
+  if (type === 'quality') {
     quality = newValue;
   }
-  if (type == 'completness') {
+  if (type === 'completness') {
     completeness = newValue;
   }
-  if (type == 'hint') {
+  if (type === 'hint') {
     hint = newValue;
   }
-  if (type == 'comment') {
+  if (type === 'comment') {
     content = newValue;
   }
 

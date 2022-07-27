@@ -30,13 +30,6 @@ const ControlWidget = ({
     </div>
     <div>
       <InputGroup compact style={{ width: 'auto', display: 'inline-block' }}>
-        <Button
-          type="primary"
-          disabled={summaryDisabled}
-          onClick={onClickSummary}
-        >
-          Summary
-        </Button>
         <RecordSelector
           onChange={onChangeRecord}
           recordIndex={recordIndex}

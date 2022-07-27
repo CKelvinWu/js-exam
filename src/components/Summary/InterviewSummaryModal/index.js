@@ -8,9 +8,12 @@ import PageSpin from 'components/PageSpin';
 import QuestionComment from 'components/Summary/QuestionComment';
 import { onCreateResult } from 'graphql/subscriptions';
 import { getTest } from './queries';
+import _ from 'lodash';
 
 const toInterviewResult = data => {
   console.log(data.users.items);
+  const non_null = data.users.items.filter(x => x != null);
+  data.users.items = non_null;
   const interviewers = data.users.items.map(v => v.user);
   const questions = data.records.items.map(v => ({
     id: v.id,
@@ -59,9 +62,7 @@ const InterviewSummaryModal = props => (
         let comments = [];
         let summaries = [];
         if (data && !loading && !error) {
-          console.log(data);
           const interviewResult = toInterviewResult(test);
-          console.log('this is result', interviewResult);
           interviewers = interviewResult.interviewers;
           questions = interviewResult.questions;
           comments = interviewResult.comments;
@@ -83,7 +84,7 @@ const InterviewSummaryModal = props => (
             {!loading && test && (
               <>
                 <Typography.Title level={4}>
-                  Interview Questions
+                  Overall Score by Interviewer
                 </Typography.Title>
                 {interviewers.map(interviewer => (
                   <QuestionComment
@@ -95,7 +96,9 @@ const InterviewSummaryModal = props => (
                     )}
                   />
                 ))}
-                <Typography.Title level={4}>Summary</Typography.Title>
+                <Typography.Title level={4}>
+                  Comments by questions
+                </Typography.Title>
                 <Row type="flex" justify="space-around">
                   {interviewers.map(interviewer => {
                     const summary = summaries.find(
