@@ -63,6 +63,7 @@ class TestList extends React.Component {
   };
 
   showAddSummaryModal = e => {
+    console.log(e.target);
     this.setState({
       addSummaryModalVisible: true,
       addSummaryModalTarget: e.target.getAttribute('candidate'),

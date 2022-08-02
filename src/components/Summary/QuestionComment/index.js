@@ -5,7 +5,6 @@ import { Row, Col, Rate, Icon, Divider } from 'antd';
 class QuestionComment extends React.Component {
   render() {
     const { interviewer, questions, comments } = this.props;
-    console.log(interviewer);
     return (
       <>
         <h3>Interviewer：{interviewer}</h3>

@@ -1,17 +1,18 @@
 import React from 'react';
-import { Typography, Modal, Row, Col, Card, Rate, Empty } from 'antd';
+import { Typography, Modal, Row, Col, Card, Rate, Empty, Result } from 'antd';
 import PropTypes from 'prop-types';
 import { Connect } from 'aws-amplify-react';
-import { graphqlOperation } from 'aws-amplify';
+import { API, graphqlOperation } from 'aws-amplify';
 import PageEmpty from 'components/PageEmpty';
 import PageSpin from 'components/PageSpin';
 import QuestionComment from 'components/Summary/QuestionComment';
 import { onCreateResult } from 'graphql/subscriptions';
-import { getTest } from './queries';
-import _ from 'lodash';
+import { getTest, listTest, getTest2, getallsnapcomments } from './queries';
+import { listRecords, listTests, getRecord } from 'graphql/queries';
+
+//import _ from 'lodash';
 
 const toInterviewResult = data => {
-  console.log(data.users.items);
   const non_null = data.users.items.filter(x => x != null);
   data.users.items = non_null;
   const interviewers = data.users.items.map(v => v.user);
@@ -41,6 +42,8 @@ const handleSummarySubscription = (prev, { onCreateResult: newResult }) => {
 };
 
 const InterviewSummaryModal = props => (
+  // this gave me a inspiration: write the query with indentation
+
   <Modal
     title={props.title}
     visible={props.visible}
@@ -49,7 +52,7 @@ const InterviewSummaryModal = props => (
     width={props.width}
   >
     <Connect
-      query={graphqlOperation(getTest, {
+      query={graphqlOperation(getTest2, {
         id: props.testID,
       })}
       subscription={graphqlOperation(onCreateResult)}
@@ -61,13 +64,27 @@ const InterviewSummaryModal = props => (
         let questions = [];
         let comments = [];
         let summaries = [];
+        let snapcomments = [];
+        //let snapcomments=[];
         if (data && !loading && !error) {
           const interviewResult = toInterviewResult(test);
           interviewers = interviewResult.interviewers;
           questions = interviewResult.questions;
           comments = interviewResult.comments;
           summaries = interviewResult.summaries;
+          const records = data.getTest.records.items;
+          const history = records.map(x => x.history);
+          const snapcomments = history.map(x => x.items[0].snapComments);
+          console.log(snapcomments);
+          console.log(records);
+
+          /*async function all_comments(){
+            const snapcomments=await getallsnapcomments(props.testID).then(c=>c.data.getTest.records)
+          }
+          all_comments()
+          console.log(snapcomments)*/
         }
+
         return (
           <PageSpin spinning={loading}>
             {!loading && error && (

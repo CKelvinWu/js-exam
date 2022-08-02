@@ -135,11 +135,7 @@ class AddSummaryModal extends React.Component {
                                 format={rateValueFormatter}
                                 value={summary.language}
                               />
-                              <Field
-                                name="techreview"
-                                component={RfTextArea}
-                                value={summary.techreview}
-                              />
+
                               <h4 style={{ marginTop: '12px' }}>
                                 Personality：
                               </h4>
@@ -150,11 +146,7 @@ class AddSummaryModal extends React.Component {
                                 format={rateValueFormatter}
                                 value={summary.workwith}
                               />
-                              <Field
-                                name="perstyreview"
-                                component={RfTextArea}
-                                value={summary.perstyreview}
-                              />
+
                               <Button
                                 htmlType="submit"
                                 type="primary"
@@ -178,6 +170,16 @@ class AddSummaryModal extends React.Component {
     );
   }
 }
+/*<Field
+                                name="techreview"
+                                component={RfTextArea}
+                                value={summary.techreview}
+                              />
+                              <Field
+                                name="perstyreview"
+                                component={RfTextArea}
+                                value={summary.perstyreview}
+                              />*/
 
 AddSummaryModal.propTypes = {
   testID: PropTypes.string.isRequired,
