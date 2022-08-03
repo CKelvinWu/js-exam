@@ -8,7 +8,6 @@ import PageSpin from 'components/PageSpin';
 import QuestionComment from 'components/Summary/QuestionComment';
 import { onCreateResult } from 'graphql/subscriptions';
 import { getTest, listTest, getTest2, getallsnapcomments } from './queries';
-import { listRecords, listTests, getRecord } from 'graphql/queries';
 
 //import _ from 'lodash';
 
@@ -42,7 +41,7 @@ const handleSummarySubscription = (prev, { onCreateResult: newResult }) => {
 };
 
 const InterviewSummaryModal = props => (
-  // this gave me a inspiration: write the query with indentation
+  // this gave me a inspiration: upper area is tfor data storage
 
   <Modal
     title={props.title}
@@ -64,25 +63,15 @@ const InterviewSummaryModal = props => (
         let questions = [];
         let comments = [];
         let summaries = [];
-        let snapcomments = [];
-        //let snapcomments=[];
+        let records = [];
         if (data && !loading && !error) {
           const interviewResult = toInterviewResult(test);
           interviewers = interviewResult.interviewers;
           questions = interviewResult.questions;
           comments = interviewResult.comments;
           summaries = interviewResult.summaries;
-          const records = data.getTest.records.items;
-          const history = records.map(x => x.history);
-          const snapcomments = history.map(x => x.items[0].snapComments);
-          console.log(snapcomments);
-          console.log(records);
-
-          /*async function all_comments(){
-            const snapcomments=await getallsnapcomments(props.testID).then(c=>c.data.getTest.records)
-          }
-          all_comments()
-          console.log(snapcomments)*/
+          records = data.getTest.records.items;
+          console.log('all', records);
         }
 
         return (
@@ -117,7 +106,78 @@ const InterviewSummaryModal = props => (
                   Comments by questions
                 </Typography.Title>
                 <Row type="flex" justify="space-around">
-                  {interviewers.map(interviewer => {
+                  {records.map(record => {
+                    const single_question = record.ques;
+                    const single_history = record.history.items;
+                    const single_comments = single_history.map(
+                      x => x.snapComments,
+                    );
+                    console.log(single_question.name, single_comments);
+                    let all_comments = '';
+                    const single_comments_2 = single_comments.map(x => x.items);
+                    console.log(single_comments_2);
+                    const single_comments_3 = single_comments_2.map(x =>
+                      x.map(y =>
+                        all_comments.concat(
+                          y.author,
+                          '  :  ',
+                          y.content,
+                          '  ',
+                          '\n',
+                        ),
+                      ),
+                    );
+                    console.log(single_comments_3);
+                    return (
+                      <Col
+                        key={single_question.id}
+                        span={20 / single_comments_3.length}
+                      >
+                        <Row type="flex" align="middle" justify="space-around">
+                          <h3>Questions：{single_question.name}</h3>
+                        </Row>
+                        <Row>
+                          {record ? (
+                            <Card>
+                              <Card
+                                bordered={false}
+                                title="Comments of Interviewers："
+                                type="inner"
+                              >
+                                <Card type="inner">
+                                  <p>{single_comments_3}</p>
+                                </Card>
+                              </Card>
+                            </Card>
+                          ) : (
+                            <Empty description="No Comment Yet..." />
+                          )}
+                        </Row>
+                      </Col>
+                    );
+                  })}
+                </Row>
+              </>
+            )}
+          </PageSpin>
+        );
+      }}
+    </Connect>
+  </Modal>
+);
+
+InterviewSummaryModal.propTypes = {
+  testID: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  visible: PropTypes.bool.isRequired,
+  onCancel: PropTypes.func.isRequired,
+  footer: PropTypes.object,
+  width: PropTypes.number.isRequired,
+};
+
+export default InterviewSummaryModal;
+/*
+{interviewers.map(interviewer => {
                     const summary = summaries.find(
                       v => v.author === interviewer.name,
                     );
@@ -185,24 +245,4 @@ const InterviewSummaryModal = props => (
                         </Row>
                       </Col>
                     );
-                  })}
-                </Row>
-              </>
-            )}
-          </PageSpin>
-        );
-      }}
-    </Connect>
-  </Modal>
-);
-
-InterviewSummaryModal.propTypes = {
-  testID: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  visible: PropTypes.bool.isRequired,
-  onCancel: PropTypes.func.isRequired,
-  footer: PropTypes.object,
-  width: PropTypes.number.isRequired,
-};
-
-export default InterviewSummaryModal;
+                  })}*/
