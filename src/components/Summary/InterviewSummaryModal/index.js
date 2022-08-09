@@ -1,16 +1,29 @@
 import React from 'react';
-import { Typography, Modal, Row, Col, Card, Rate, Empty, Result } from 'antd';
+import {
+  Typography,
+  Modal,
+  Row,
+  Col,
+  Card,
+  Rate,
+  Empty,
+  Result,
+  Button,
+  Form,
+  message,
+} from 'antd';
 import PropTypes from 'prop-types';
-import { Connect } from 'aws-amplify-react';
+import { Connect, propStyle } from 'aws-amplify-react';
 import { API, graphqlOperation } from 'aws-amplify';
 import PageEmpty from 'components/PageEmpty';
 import PageSpin from 'components/PageSpin';
 import QuestionComment from 'components/Summary/QuestionComment';
 import { onCreateResult } from 'graphql/subscriptions';
 import { getTest, listTest, getTest2, getallsnapcomments } from './queries';
+import createComment from 'utils/comment/comment';
 
 //import _ from 'lodash';
-
+//This is react stateless function component but the hook function is blocked
 const toInterviewResult = data => {
   const non_null = data.users.items.filter(x => x != null);
   data.users.items = non_null;
@@ -71,9 +84,18 @@ const InterviewSummaryModal = props => (
           comments = interviewResult.comments;
           summaries = interviewResult.summaries;
           records = data.getTest.records.items;
-          console.log('all', records);
+        }
+        console.log(props.currentuser);
+        console.log(interviewers);
+        const current_interviewer = {
+          id: props.currentuser.id,
+          name: props.currentuser.name,
+        };
+        if (!(current_interviewer in interviewers)) {
+          interviewers.push(current_interviewer);
         }
 
+        ////////////////////////////data part//////////////////
         return (
           <PageSpin spinning={loading}>
             {!loading && error && (
@@ -92,16 +114,106 @@ const InterviewSummaryModal = props => (
                 <Typography.Title level={4}>
                   Overall Score by Interviewer
                 </Typography.Title>
-                {interviewers.map(interviewer => (
-                  <QuestionComment
-                    key={interviewer.id}
-                    interviewer={interviewer.name}
-                    questions={questions}
-                    comments={comments.filter(
-                      c => c.author === interviewer.name,
-                    )}
-                  />
-                ))}
+
+                {interviewers.map(interviewer => {
+                  //check if comment is empty
+                  //console.log(interviewer)
+                  const commentst = comments.filter(
+                    c => c.author === interviewer.name,
+                  );
+                  let questioncomment = '';
+                  if (
+                    commentst.length === 0 &&
+                    interviewer.name === props.currentuser.name
+                  ) {
+                    console.log(data);
+                    let formdata = {
+                      author: props.currentuser,
+                      quality: 2,
+                      completeness: 2,
+                      hints: 2,
+                    };
+                    questioncomment = (
+                      <div>
+                        {' '}
+                        <QuestionComment
+                          key={interviewer.id}
+                          interviewer={interviewer.name}
+                          questions={questions}
+                          comments={comments.filter(
+                            c => c.author === interviewer.name,
+                          )}
+                        />
+                        <Form
+                          onSubmit={async () => {
+                            console.log(formdata);
+                            const id = data.getTest.records.items[0].id; //using first question to represent the overall score
+                            const params = {
+                              commentRecordId: id,
+                              author: formdata.author,
+                              quality: formdata.quality,
+                              hint: formdata.hints,
+                              completeness: formdata.completeness,
+                              tags: 'no more comment',
+                              content: 'overall_score',
+                            };
+                            console.log(params);
+                            await createComment(params);
+                            message.success('Add Overall Score successfully');
+                          }}
+                        >
+                          <Col>
+                            <Rate
+                              onChange={new_val => {
+                                formdata.quality = new_val;
+                                console.log(formdata);
+                              }}
+                            >
+                              Code quality
+                            </Rate>
+                          </Col>
+                          <Col>
+                            <Rate
+                              onChange={new_val => {
+                                formdata.compeleteness = new_val;
+                                console.log(formdata);
+                              }}
+                            >
+                              Compeleteness
+                            </Rate>
+                          </Col>
+                          <Col>
+                            <Rate
+                              onChange={new_val => {
+                                formdata.hints = new_val;
+                                console.log(formdata);
+                              }}
+                            >
+                              How much hints
+                            </Rate>
+                          </Col>
+
+                          <Button type="primary" htmlType="submit">
+                            Add a Score
+                          </Button>
+                        </Form>
+                      </div>
+                    );
+                  } else {
+                    questioncomment = (
+                      <QuestionComment
+                        key={interviewer.id}
+                        interviewer={interviewer.name}
+                        questions={questions}
+                        comments={comments.filter(
+                          c => c.author === interviewer.name,
+                        )}
+                      />
+                    );
+                  }
+
+                  return questioncomment;
+                })}
                 <Typography.Title level={4}>
                   Comments by questions
                 </Typography.Title>
@@ -112,10 +224,10 @@ const InterviewSummaryModal = props => (
                     const single_comments = single_history.map(
                       x => x.snapComments,
                     );
-                    console.log(single_question.name, single_comments);
+                    //console.log(single_question.name, single_comments);
                     let all_comments = '';
                     const single_comments_2 = single_comments.map(x => x.items);
-                    console.log(single_comments_2);
+                    //console.log(single_comments_2);
                     const single_comments_3 = single_comments_2.map(x =>
                       x.map(y =>
                         all_comments.concat(
@@ -127,7 +239,7 @@ const InterviewSummaryModal = props => (
                         ),
                       ),
                     );
-                    console.log(single_comments_3);
+                    //console.log(single_comments_3);
                     return (
                       <Col
                         key={single_question.id}
@@ -165,7 +277,6 @@ const InterviewSummaryModal = props => (
     </Connect>
   </Modal>
 );
-
 InterviewSummaryModal.propTypes = {
   testID: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
@@ -245,4 +356,21 @@ export default InterviewSummaryModal;
                         </Row>
                       </Col>
                     );
-                  })}*/
+                  })}
+                  
+                  
+                                  <AddSummaryModal
+                testID={"fsfs"}
+                title={"chunfu"}
+                footer={null}
+                width={800}
+                visible={score_visible}
+                onOk={()=>{score_visible=false;console.log(score_visible)}}
+                onCancel={()=>{score_visible=false;console.log(score_visible)}}
+              >
+                
+              </AddSummaryModal>
+                  
+                  
+                  
+                  */

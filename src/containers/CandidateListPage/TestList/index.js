@@ -9,6 +9,7 @@ import { deleteTestAction } from 'redux/test/actions';
 import AddSummaryModal from 'components/Summary/AddSummaryModal';
 import InterviewSummaryModal from 'components/Summary/InterviewSummaryModal';
 import style from './TestList.module.scss';
+import User from 'utils/user';
 
 class TestList extends React.Component {
   state = {
@@ -20,6 +21,7 @@ class TestList extends React.Component {
     addSummaryModalVisible: false,
     addSummaryModalTarget: '',
     testId: '',
+    testScoreModalVisible: false,
   };
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -63,7 +65,6 @@ class TestList extends React.Component {
   };
 
   showAddSummaryModal = e => {
-    console.log(e.target);
     this.setState({
       addSummaryModalVisible: true,
       addSummaryModalTarget: e.target.getAttribute('candidate'),
@@ -123,17 +124,7 @@ class TestList extends React.Component {
                     placement="top"
                     title="write summary"
                     onClick={this.handleSummaryEdit}
-                  >
-                    <Button
-                      type="link"
-                      icon="form"
-                      candidate={item.subjectId}
-                      testid={item.id}
-                      onClick={this.showAddSummaryModal}
-                    >
-                      Write Summary
-                    </Button>
-                  </Tooltip>,
+                  ></Tooltip>,
                 );
               }
               actions.push(
@@ -186,15 +177,9 @@ class TestList extends React.Component {
           onCancel={this.testResultModalCancel}
           footer={null}
           width={1000}
+          currentuser={jeUser}
         ></InterviewSummaryModal>
-        <AddSummaryModal
-          testID={testId}
-          title={addSummaryModalTarget}
-          visible={addSummaryModalVisible}
-          onCancel={this.addSummaryModalCancel}
-          footer={null}
-          width={800}
-        ></AddSummaryModal>
+
         <Modal
           title=""
           visible={delConfirmModalVisible}
@@ -218,3 +203,21 @@ const mapDispatchToProps = dispatch => ({
   deleteTestAction: delTest => dispatch(deleteTestAction(delTest)),
 });
 export default connect(null, mapDispatchToProps)(TestList);
+/*       <AddSummaryModal
+          testID={testId}
+          title={addSummaryModalTarget}
+          visible={addSummaryModalVisible}
+          onCancel={this.addSummaryModalCancel}
+          footer={null}
+          width={800}
+        ></AddSummaryModal>
+                            <Button
+                      type="link"
+                      icon="form"
+                      candidate={item.subjectId}
+                      testid={item.id}
+                      onClick={this.showAddSummaryModal}
+                      visible={false}
+                    >
+                      Write Summary
+                    </Button>*/
