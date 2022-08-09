@@ -6,7 +6,6 @@ import { formatTime } from 'utils/format';
 
 import { List, Avatar, Icon, Button, Modal, Tooltip } from 'antd';
 import { deleteTestAction } from 'redux/test/actions';
-import AddSummaryModal from 'components/Summary/AddSummaryModal';
 import InterviewSummaryModal from 'components/Summary/InterviewSummaryModal';
 import style from './TestList.module.scss';
 import User from 'utils/user';
@@ -18,8 +17,6 @@ class TestList extends React.Component {
     delAnime: false,
     testResultModalVisible: false,
     testResultModalTarget: '',
-    addSummaryModalVisible: false,
-    addSummaryModalTarget: '',
     testId: '',
     testScoreModalVisible: false,
   };
@@ -64,20 +61,6 @@ class TestList extends React.Component {
     });
   };
 
-  showAddSummaryModal = e => {
-    this.setState({
-      addSummaryModalVisible: true,
-      addSummaryModalTarget: e.target.getAttribute('candidate'),
-      testId: e.target.getAttribute('testid'),
-    });
-  };
-
-  addSummaryModalCancel = () => {
-    this.setState({
-      addSummaryModalVisible: false,
-    });
-  };
-
   render() {
     const { testListData } = this.props;
     const {
@@ -86,8 +69,6 @@ class TestList extends React.Component {
       delAnime,
       testResultModalVisible,
       testResultModalTarget,
-      addSummaryModalVisible,
-      addSummaryModalTarget,
       testId,
     } = this.state;
     const jeUser = localStorage.jeUser && JSON.parse(localStorage.jeUser);
@@ -203,21 +184,3 @@ const mapDispatchToProps = dispatch => ({
   deleteTestAction: delTest => dispatch(deleteTestAction(delTest)),
 });
 export default connect(null, mapDispatchToProps)(TestList);
-/*       <AddSummaryModal
-          testID={testId}
-          title={addSummaryModalTarget}
-          visible={addSummaryModalVisible}
-          onCancel={this.addSummaryModalCancel}
-          footer={null}
-          width={800}
-        ></AddSummaryModal>
-                            <Button
-                      type="link"
-                      icon="form"
-                      candidate={item.subjectId}
-                      testid={item.id}
-                      onClick={this.showAddSummaryModal}
-                      visible={false}
-                    >
-                      Write Summary
-                    </Button>*/
