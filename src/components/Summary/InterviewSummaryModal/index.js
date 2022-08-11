@@ -11,6 +11,7 @@ import {
   Button,
   Form,
   message,
+  Input,
 } from 'antd';
 import PropTypes from 'prop-types';
 import { Connect, propStyle } from 'aws-amplify-react';
@@ -84,17 +85,9 @@ const InterviewSummaryModal = props => (
           comments = interviewResult.comments;
           summaries = interviewResult.summaries;
           records = data.getTest.records.items;
+          console.log(records[0].comment.items);
         }
-        console.log(props.currentuser);
-        console.log(interviewers);
-        const current_interviewer = {
-          id: props.currentuser.id,
-          name: props.currentuser.name,
-        };
-        if (!(current_interviewer in interviewers)) {
-          interviewers.push(current_interviewer);
-        }
-
+        let comment_count = 1;
         ////////////////////////////data part//////////////////
         return (
           <PageSpin spinning={loading}>
@@ -115,39 +108,33 @@ const InterviewSummaryModal = props => (
                   Overall Score by Interviewer
                 </Typography.Title>
 
-                {interviewers.map(interviewer => {
-                  //check if comment is empty
-                  //console.log(interviewer)
-                  const commentst = comments.filter(
-                    c => c.author === interviewer.name,
-                  );
+                {comments.map(comment => {
                   let questioncomment = '';
-                  if (
-                    commentst.length === 0 &&
-                    interviewer.name === props.currentuser.name
-                  ) {
-                    console.log(data);
+                  if (comments.length === comment_count) {
+                    let comment_name = '';
+                    let comment_text = '';
                     let formdata = {
-                      author: props.currentuser,
+                      author: comment_name,
                       quality: 2,
                       completeness: 2,
                       hints: 2,
+                      content: comment_text,
                     };
+
+                    console.log('counter works!');
                     questioncomment = (
                       <div>
                         {' '}
                         <QuestionComment
-                          key={interviewer.id}
-                          interviewer={interviewer.name}
-                          questions={questions}
-                          comments={comments.filter(
-                            c => c.author === interviewer.name,
-                          )}
+                          interviewer={comment.author}
+                          questions={[questions[0]]}
+                          comments={[comment]}
                         />
+                        You can enter new comment here
                         <Form
                           onSubmit={async () => {
                             console.log(formdata);
-                            const id = data.getTest.records.items[0].id; //using first question to represent the overall score
+                            const id = data.getTest.records.items[0].id;
                             const params = {
                               commentRecordId: id,
                               author: formdata.author,
@@ -161,6 +148,7 @@ const InterviewSummaryModal = props => (
                             await createComment(params);
                             message.success('Add Overall Score successfully');
                           }}
+                          align={'middle'}
                         >
                           <Col>
                             <Rate
@@ -192,7 +180,22 @@ const InterviewSummaryModal = props => (
                               How much hints
                             </Rate>
                           </Col>
-
+                          <Col>
+                            <Input
+                              onChange={e => {
+                                comment_name = e;
+                              }}
+                            />
+                            Please leave your name
+                          </Col>
+                          <Col>
+                            <Input
+                              onChange={e => {
+                                comment_text = e;
+                              }}
+                            />
+                            Please leave your comment
+                          </Col>
                           <Button type="primary" htmlType="submit">
                             Add a Score
                           </Button>
@@ -202,16 +205,15 @@ const InterviewSummaryModal = props => (
                   } else {
                     questioncomment = (
                       <QuestionComment
-                        key={interviewer.id}
-                        interviewer={interviewer.name}
-                        questions={questions}
-                        comments={comments.filter(
-                          c => c.author === interviewer.name,
-                        )}
+                        interviewer={comment.author}
+                        questions={[questions]}
+                        comments={[comment]}
                       />
                     );
                   }
-
+                  comment_count = comment_count + 1;
+                  console.log(comment_count, comments.length);
+                  console.log(comments.length == comment_count);
                   return questioncomment;
                 })}
                 <Typography.Title level={4}>
@@ -224,10 +226,8 @@ const InterviewSummaryModal = props => (
                     const single_comments = single_history.map(
                       x => x.snapComments,
                     );
-                    //console.log(single_question.name, single_comments);
                     let all_comments = '';
                     const single_comments_2 = single_comments.map(x => x.items);
-                    //console.log(single_comments_2);
                     const single_comments_3 = single_comments_2.map(x =>
                       x.map(y =>
                         all_comments.concat(
@@ -239,7 +239,6 @@ const InterviewSummaryModal = props => (
                         ),
                       ),
                     );
-                    //console.log(single_comments_3);
                     return (
                       <Col key={single_question.id} span={50}>
                         <Row type="flex" align="middle" justify="space-around">
