@@ -241,10 +241,7 @@ const InterviewSummaryModal = props => (
                     );
                     //console.log(single_comments_3);
                     return (
-                      <Col
-                        key={single_question.id}
-                        span={20 / single_comments_3.length}
-                      >
+                      <Col key={single_question.id} span={50}>
                         <Row type="flex" align="middle" justify="space-around">
                           <h3>Questions：{single_question.name}</h3>
                         </Row>
@@ -257,7 +254,9 @@ const InterviewSummaryModal = props => (
                                 type="inner"
                               >
                                 <Card type="inner">
-                                  <p>{single_comments_3}</p>
+                                  <p style={{ whiteSpace: 'pre-line' }}>
+                                    {single_comments_3}
+                                  </p>
                                 </Card>
                               </Card>
                             </Card>
