@@ -26,9 +26,8 @@ import createComment from 'utils/comment/comment';
 //import _ from 'lodash';
 //This is react stateless function component but the hook function is blocked
 const toInterviewResult = data => {
-  /*const non_null = data.users.items.filter(x => x != null);
-  data.users.items = non_null;*/
   const interviewers = data.users.items.filter(x => x).map(v => v.user);
+
   const questions = data.records.items.map(v => ({
     id: v.id,
     name: v.ques.name,
