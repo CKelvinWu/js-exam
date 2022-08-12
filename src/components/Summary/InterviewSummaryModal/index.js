@@ -53,6 +53,96 @@ const handleSummarySubscription = (prev, { onCreateResult: newResult }) => {
   prev.getTest.results.items.push(newResult);
   return prev;
 };
+const AddNewScoreForm = testid => {
+  console.log(testid);
+  let comment_name = '';
+  let comment_text = '';
+  let formdata = {
+    author: comment_name,
+    quality: 2,
+    completeness: 2,
+    hints: 2,
+    content: comment_text,
+  };
+
+  const questioncomment = (
+    <div>
+      {' '}
+      You can enter new comment here
+      <Form
+        onSubmit={async () => {
+          const id = testid;
+          formdata.author = comment_name;
+          formdata.content = comment_text;
+          const params = {
+            commentRecordId: id,
+            author: formdata.author,
+            quality: formdata.quality,
+            hint: formdata.hints,
+            completeness: formdata.completeness,
+            tags: 'no more comment',
+            content: formdata.content,
+          };
+          console.log(params);
+          await createComment(params);
+          message.success('Add Overall Score successfully');
+        }}
+        align={'middle'}
+      >
+        <Col>
+          <Rate
+            onChange={new_val => {
+              formdata.quality = new_val;
+              console.log(formdata);
+            }}
+          >
+            Code quality
+          </Rate>
+        </Col>
+        <Col>
+          <Rate
+            onChange={new_val => {
+              formdata.compeleteness = new_val;
+              console.log(formdata);
+            }}
+          >
+            Compeleteness
+          </Rate>
+        </Col>
+        <Col>
+          <Rate
+            onChange={new_val => {
+              formdata.hints = new_val;
+              console.log(formdata);
+            }}
+          >
+            How much hints
+          </Rate>
+        </Col>
+        <Col>
+          <Input
+            onChange={e => {
+              comment_name = e.target.value;
+            }}
+          />
+          Please leave your name
+        </Col>
+        <Col>
+          <Input
+            onChange={e => {
+              comment_text = e.target.value;
+            }}
+          />
+          Please leave your comment
+        </Col>
+        <Button type="primary" htmlType="submit">
+          Add a Score
+        </Button>
+      </Form>
+    </div>
+  );
+  return questioncomment;
+};
 
 const InterviewSummaryModal = props => (
   // this gave me a inspiration: upper area is tfor data storage
@@ -85,9 +175,19 @@ const InterviewSummaryModal = props => (
           comments = interviewResult.comments;
           summaries = interviewResult.summaries;
           records = data.getTest.records.items;
-          console.log(records[0].comment.items);
         }
         let comment_count = 1;
+        let new_score = '';
+        if (comments.length === 0) {
+          try {
+            new_score = AddNewScoreForm(data.getTest.records.items[0].id);
+          } catch (e) {
+            console.log(e);
+            new_score = '';
+          }
+        } else {
+          new_score = '';
+        }
         ////////////////////////////data part//////////////////
         return (
           <PageSpin spinning={loading}>
@@ -108,9 +208,12 @@ const InterviewSummaryModal = props => (
                   Overall Score by Interviewer
                 </Typography.Title>
 
+                <div>{new_score}</div>
+
                 {comments.map(comment => {
                   let questioncomment = '';
                   if (comments.length === comment_count) {
+                    //put from here
                     let comment_name = '';
                     let comment_text = '';
                     let formdata = {
@@ -121,7 +224,6 @@ const InterviewSummaryModal = props => (
                       content: comment_text,
                     };
 
-                    console.log('counter works!');
                     questioncomment = (
                       <div>
                         {' '}
@@ -134,6 +236,8 @@ const InterviewSummaryModal = props => (
                         <Form
                           onSubmit={async () => {
                             console.log(formdata);
+                            formdata.author = comment_name;
+                            formdata.content = comment_text;
                             const id = data.getTest.records.items[0].id;
                             const params = {
                               commentRecordId: id,
@@ -142,7 +246,7 @@ const InterviewSummaryModal = props => (
                               hint: formdata.hints,
                               completeness: formdata.completeness,
                               tags: 'no more comment',
-                              content: 'overall_score',
+                              content: formdata.content,
                             };
                             console.log(params);
                             await createComment(params);
@@ -183,7 +287,7 @@ const InterviewSummaryModal = props => (
                           <Col>
                             <Input
                               onChange={e => {
-                                comment_name = e;
+                                comment_name = e.target.value;
                               }}
                             />
                             Please leave your name
@@ -191,7 +295,7 @@ const InterviewSummaryModal = props => (
                           <Col>
                             <Input
                               onChange={e => {
-                                comment_text = e;
+                                comment_text = e.target.value;
                               }}
                             />
                             Please leave your comment
@@ -200,7 +304,7 @@ const InterviewSummaryModal = props => (
                             Add a Score
                           </Button>
                         </Form>
-                      </div>
+                      </div> //to here in the x should be placed in new modal, but no time to use
                     );
                   } else {
                     questioncomment = (
