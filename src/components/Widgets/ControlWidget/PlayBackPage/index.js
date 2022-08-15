@@ -2,20 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import PageControlBar from 'components/PageControlBar';
 import RecordSelector from 'components/Selectors/RecordSelector';
-import { Button, Icon, Input } from 'antd';
+import { Icon } from 'antd';
 import { formatTime } from 'utils/format';
 import styles from './ControlWidget.module.scss';
-
-const InputGroup = Input.Group;
 
 const ControlWidget = ({
   recordIndex,
   onChangeRecord,
   recordList,
-  onClickSummary,
   candidate,
   testDate,
-  summaryDisabled,
 }) => (
   <PageControlBar>
     <div className={styles.info}>
@@ -28,15 +24,7 @@ const ControlWidget = ({
         {candidate}
       </span>
     </div>
-    <div>
-      <InputGroup compact style={{ width: 'auto', display: 'inline-block' }}>
-        <RecordSelector
-          onChange={onChangeRecord}
-          recordIndex={recordIndex}
-          list={recordList}
-        />
-      </InputGroup>
-    </div>
+    <div></div>
   </PageControlBar>
 );
 

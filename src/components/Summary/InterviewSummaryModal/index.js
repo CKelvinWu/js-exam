@@ -7,24 +7,21 @@ import {
   Card,
   Rate,
   Empty,
-  Result,
   Button,
   Form,
   message,
   Input,
 } from 'antd';
 import PropTypes from 'prop-types';
-import { Connect, propStyle } from 'aws-amplify-react';
+import { Connect } from 'aws-amplify-react';
 import { API, graphqlOperation } from 'aws-amplify';
 import PageEmpty from 'components/PageEmpty';
 import PageSpin from 'components/PageSpin';
 import QuestionComment from 'components/Summary/QuestionComment';
 import { onCreateResult } from 'graphql/subscriptions';
-import { getTest, listTest, getTest2, getallsnapcomments } from './queries';
+import { getTest2 } from './queries';
 import createComment from 'utils/comment/comment';
 
-//import _ from 'lodash';
-//This is react stateless function component but the hook function is blocked
 const toInterviewResult = data => {
   const interviewers = data.users.items.filter(x => x).map(v => v.user);
 
@@ -52,8 +49,8 @@ const handleSummarySubscription = (prev, { onCreateResult: newResult }) => {
   prev.getTest.results.items.push(newResult);
   return prev;
 };
+
 const AddNewScoreForm = testid => {
-  console.log(testid);
   let comment_name = '';
   let comment_text = '';
   let formdata = {
@@ -181,7 +178,6 @@ const InterviewSummaryModal = props => (
           try {
             new_score = AddNewScoreForm(data.getTest.records.items[0].id);
           } catch (e) {
-            console.log(e);
             new_score = '';
           }
         } else {
@@ -211,8 +207,8 @@ const InterviewSummaryModal = props => (
 
                 {comments.map(comment => {
                   let questioncomment = '';
+                  console.log('identity check', comments.length, comment_count);
                   if (comments.length === comment_count) {
-                    //put from here
                     let comment_name = '';
                     let comment_text = '';
                     let formdata = {
@@ -303,7 +299,7 @@ const InterviewSummaryModal = props => (
                             Add a Score
                           </Button>
                         </Form>
-                      </div> //to here in the x should be placed in new modal, but no time to use
+                      </div>
                     );
                   } else {
                     questioncomment = (
@@ -314,7 +310,7 @@ const InterviewSummaryModal = props => (
                       />
                     );
                   }
-                  console.log(comments.length == comment_count);
+                  comment_count = comment_count + 1;
                   return questioncomment;
                 })}
                 <Typography.Title level={4}>

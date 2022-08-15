@@ -4,11 +4,10 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { formatTime } from 'utils/format';
 
-import { List, Avatar, Icon, Button, Modal, Tooltip } from 'antd';
+import { List, Avatar, Icon, Button, Modal } from 'antd';
 import { deleteTestAction } from 'redux/test/actions';
 import InterviewSummaryModal from 'components/Summary/InterviewSummaryModal';
 import style from './TestList.module.scss';
-import User from 'utils/user';
 
 class TestList extends React.Component {
   state = {
@@ -18,7 +17,6 @@ class TestList extends React.Component {
     testResultModalVisible: false,
     testResultModalTarget: '',
     testId: '',
-    testScoreModalVisible: false,
   };
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -82,10 +80,6 @@ class TestList extends React.Component {
             const actions = [];
             const atLeastOneEndRecord =
               item.records.items.filter(v => v.status === 'closed').length > 0;
-            const isInterviewer =
-              item.users.items &&
-              item.users.items.map(v => v && v.user.id).includes(jeUser.id) &&
-              !item.results.items.map(v => v.author).includes(jeUser.name);
             const isHost = item.host && item.host.id === jeUser.id;
             if (isHost) {
               actions.push(
@@ -99,15 +93,8 @@ class TestList extends React.Component {
               );
             }
             if (atLeastOneEndRecord) {
-              if (isInterviewer) {
-                actions.push(
-                  <Tooltip
-                    placement="top"
-                    title="write summary"
-                    onClick={this.handleSummaryEdit}
-                  ></Tooltip>,
-                );
-              }
+              //here we still need the atleastoneendrecord to check if the
+              //test is still going on
               actions.push(
                 <Button
                   type="link"
