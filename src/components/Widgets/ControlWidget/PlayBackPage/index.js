@@ -35,15 +35,7 @@ const ControlWidget = ({
         />
       </InputGroup>
     </div>
-    <div>
-      <InputGroup compact style={{ width: 'auto', display: 'inline-block' }}>
-        <RecordSelector
-          onChange={onChangeRecord}
-          recordIndex={recordIndex}
-          list={recordList}
-        />
-      </InputGroup>
-    </div>
+
     <div></div>
   </PageControlBar>
 );
