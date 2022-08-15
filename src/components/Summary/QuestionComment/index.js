@@ -9,7 +9,8 @@ class QuestionComment extends React.Component {
       return (
         <h4 style={{ display: 'inline', color: 'red' }}>Not Available !</h4>
       );
-    } else {
+    }
+    {
       return (
         <>
           <h3>Interviewer：{interviewer}</h3>
