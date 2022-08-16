@@ -12,10 +12,8 @@ const ControlWidget = ({
   recordIndex,
   onChangeRecord,
   recordList,
-  onClickSummary,
   candidate,
   testDate,
-  summaryDisabled,
 }) => (
   <PageControlBar>
     <div className={styles.info}>
@@ -30,13 +28,6 @@ const ControlWidget = ({
     </div>
     <div>
       <InputGroup compact style={{ width: 'auto', display: 'inline-block' }}>
-        <Button
-          type="primary"
-          disabled={summaryDisabled}
-          onClick={onClickSummary}
-        >
-          Summary
-        </Button>
         <RecordSelector
           onChange={onChangeRecord}
           recordIndex={recordIndex}
@@ -44,6 +35,8 @@ const ControlWidget = ({
         />
       </InputGroup>
     </div>
+
+    <div></div>
   </PageControlBar>
 );
 

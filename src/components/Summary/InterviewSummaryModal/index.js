@@ -1,16 +1,30 @@
 import React from 'react';
-import { Typography, Modal, Row, Col, Card, Rate, Empty } from 'antd';
+import {
+  Typography,
+  Modal,
+  Row,
+  Col,
+  Card,
+  Rate,
+  Empty,
+  Button,
+  Form,
+  message,
+  Input,
+} from 'antd';
 import PropTypes from 'prop-types';
 import { Connect } from 'aws-amplify-react';
-import { graphqlOperation } from 'aws-amplify';
+import { API, graphqlOperation } from 'aws-amplify';
 import PageEmpty from 'components/PageEmpty';
 import PageSpin from 'components/PageSpin';
 import QuestionComment from 'components/Summary/QuestionComment';
 import { onCreateResult } from 'graphql/subscriptions';
-import { getTest } from './queries';
+import { getTest2 } from './queries';
+import createComment from 'utils/comment/comment';
 
 const toInterviewResult = data => {
-  const interviewers = data.users.items.map(v => v.user);
+  const interviewers = data.users.items.filter(x => x).map(v => v.user);
+
   const questions = data.records.items.map(v => ({
     id: v.id,
     name: v.ques.name,
@@ -36,7 +50,99 @@ const handleSummarySubscription = (prev, { onCreateResult: newResult }) => {
   return prev;
 };
 
+const AddNewScoreForm = testid => {
+  let comment_name = '';
+  let comment_text = '';
+  let formdata = {
+    author: comment_name,
+    quality: 2,
+    completeness: 2,
+    hints: 2,
+    content: comment_text,
+  };
+
+  const questioncomment = (
+    <div>
+      {' '}
+      You can enter new comment here
+      <Form
+        onSubmit={async () => {
+          const id = testid;
+          formdata.author = comment_name;
+          formdata.content = comment_text;
+          const params = {
+            commentRecordId: id,
+            author: formdata.author,
+            quality: formdata.quality,
+            hint: formdata.hints,
+            completeness: formdata.completeness,
+            tags: 'no more comment',
+            content: formdata.content,
+          };
+          console.log(params);
+          await createComment(params);
+          message.success('Add Overall Score successfully');
+        }}
+        align={'middle'}
+      >
+        <Col>
+          <Rate
+            onChange={new_val => {
+              formdata.quality = new_val;
+              console.log(formdata);
+            }}
+          >
+            Code quality
+          </Rate>
+        </Col>
+        <Col>
+          <Rate
+            onChange={new_val => {
+              formdata.compeleteness = new_val;
+              console.log(formdata);
+            }}
+          >
+            Compeleteness
+          </Rate>
+        </Col>
+        <Col>
+          <Rate
+            onChange={new_val => {
+              formdata.hints = new_val;
+              console.log(formdata);
+            }}
+          >
+            How much hints
+          </Rate>
+        </Col>
+        <Col>
+          <Input
+            onChange={e => {
+              comment_name = e.target.value;
+            }}
+          />
+          Please leave your name
+        </Col>
+        <Col>
+          <Input
+            onChange={e => {
+              comment_text = e.target.value;
+            }}
+          />
+          Please leave your comment
+        </Col>
+        <Button type="primary" htmlType="submit">
+          Add a Score
+        </Button>
+      </Form>
+    </div>
+  );
+  return questioncomment;
+};
+
 const InterviewSummaryModal = props => (
+  // this gave me a inspiration: upper area is tfor data storage
+
   <Modal
     title={props.title}
     visible={props.visible}
@@ -45,7 +151,7 @@ const InterviewSummaryModal = props => (
     width={props.width}
   >
     <Connect
-      query={graphqlOperation(getTest, {
+      query={graphqlOperation(getTest2, {
         id: props.testID,
       })}
       subscription={graphqlOperation(onCreateResult)}
@@ -57,13 +163,27 @@ const InterviewSummaryModal = props => (
         let questions = [];
         let comments = [];
         let summaries = [];
+        let records = [];
         if (data && !loading && !error) {
           const interviewResult = toInterviewResult(test);
           interviewers = interviewResult.interviewers;
           questions = interviewResult.questions;
           comments = interviewResult.comments;
           summaries = interviewResult.summaries;
+          records = data.getTest.records.items;
         }
+        let comment_count = 1;
+        let new_score = '';
+        if (comments.length === 0) {
+          try {
+            new_score = AddNewScoreForm(data.getTest.records.items[0].id);
+          } catch (e) {
+            new_score = '';
+          }
+        } else {
+          new_score = '';
+        }
+        ////////////////////////////data part//////////////////
         return (
           <PageSpin spinning={loading}>
             {!loading && error && (
@@ -80,79 +200,159 @@ const InterviewSummaryModal = props => (
             {!loading && test && (
               <>
                 <Typography.Title level={4}>
-                  Interview Questions
+                  Overall Score by Interviewer
                 </Typography.Title>
-                {interviewers.map(interviewer => (
-                  <QuestionComment
-                    key={interviewer.id}
-                    interviewer={interviewer.name}
-                    questions={questions}
-                    comments={comments.filter(
-                      c => c.author === interviewer.name,
-                    )}
-                  />
-                ))}
-                <Typography.Title level={4}>Summary</Typography.Title>
+
+                <div>{new_score}</div>
+
+                {comments.map(comment => {
+                  let questioncomment = '';
+                  console.log('identity check', comments.length, comment_count);
+                  if (comments.length === comment_count) {
+                    let comment_name = '';
+                    let comment_text = '';
+                    let formdata = {
+                      author: comment_name,
+                      quality: 2,
+                      completeness: 2,
+                      hints: 2,
+                      content: comment_text,
+                    };
+
+                    questioncomment = (
+                      <div>
+                        {' '}
+                        <QuestionComment
+                          interviewer={comment.author}
+                          questions={[questions[0]]}
+                          comments={[comment]}
+                        />
+                        You can enter new comment here
+                        <Form
+                          onSubmit={async () => {
+                            console.log(formdata);
+                            formdata.author = comment_name;
+                            formdata.content = comment_text;
+                            const id = data.getTest.records.items[0].id;
+                            const params = {
+                              commentRecordId: id,
+                              author: formdata.author,
+                              quality: formdata.quality,
+                              hint: formdata.hints,
+                              completeness: formdata.completeness,
+                              tags: 'no more comment',
+                              content: formdata.content,
+                            };
+                            console.log(params);
+                            await createComment(params);
+                            message.success('Add Overall Score successfully');
+                          }}
+                          align={'middle'}
+                        >
+                          <Col>
+                            <Rate
+                              onChange={new_val => {
+                                formdata.quality = new_val;
+                                console.log(formdata);
+                              }}
+                            >
+                              Code quality
+                            </Rate>
+                          </Col>
+                          <Col>
+                            <Rate
+                              onChange={new_val => {
+                                formdata.compeleteness = new_val;
+                                console.log(formdata);
+                              }}
+                            >
+                              Compeleteness
+                            </Rate>
+                          </Col>
+                          <Col>
+                            <Rate
+                              onChange={new_val => {
+                                formdata.hints = new_val;
+                                console.log(formdata);
+                              }}
+                            >
+                              How much hints
+                            </Rate>
+                          </Col>
+                          <Col>
+                            <Input
+                              onChange={e => {
+                                comment_name = e.target.value;
+                              }}
+                            />
+                            Please leave your name
+                          </Col>
+                          <Col>
+                            <Input
+                              onChange={e => {
+                                comment_text = e.target.value;
+                              }}
+                            />
+                            Please leave your comment
+                          </Col>
+                          <Button type="primary" htmlType="submit">
+                            Add a Score
+                          </Button>
+                        </Form>
+                      </div>
+                    );
+                  } else {
+                    questioncomment = (
+                      <QuestionComment
+                        interviewer={comment.author}
+                        questions={[questions]}
+                        comments={[comment]}
+                      />
+                    );
+                  }
+                  comment_count = comment_count + 1;
+                  return questioncomment;
+                })}
+                <Typography.Title level={4}>
+                  Comments by questions
+                </Typography.Title>
                 <Row type="flex" justify="space-around">
-                  {interviewers.map(interviewer => {
-                    const summary = summaries.find(
-                      v => v.author === interviewer.name,
+                  {records.map(record => {
+                    const single_question = record.ques;
+                    const single_history = record.history.items;
+                    const single_comments = single_history.map(
+                      x => x.snapComments,
+                    );
+                    let all_comments = '';
+                    const single_comments_2 = single_comments.map(x => x.items);
+                    const single_comments_3 = single_comments_2.map(x =>
+                      x.map(y =>
+                        all_comments.concat(
+                          y.author,
+                          '  :  ',
+                          y.content,
+                          '  ',
+                          '\n',
+                        ),
+                      ),
                     );
                     return (
-                      <Col key={interviewer.id} span={20 / interviewers.length}>
+                      <Col key={single_question.id} span={50}>
                         <Row type="flex" align="middle" justify="space-around">
-                          <h3>Interviewer：{interviewer.name}</h3>
+                          <h3>Questions：{single_question.name}</h3>
                         </Row>
                         <Row>
-                          {summary ? (
+                          {record ? (
                             <Card>
                               <Card
                                 bordered={false}
-                                title="Technical Skills："
+                                title="Comments of Interviewers："
                                 type="inner"
                               >
-                                <div
-                                  style={{
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                  }}
-                                >
-                                  <h4 style={{ width: '49%' }}>Logic</h4>
-                                  <Rate value={summary.logic} disabled />
-                                </div>
-                                <div
-                                  style={{
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                  }}
-                                >
-                                  <h4 style={{ width: '49%' }}>
-                                    JavaScript Familiarity
-                                  </h4>
-                                  <Rate value={summary.language} disabled />
-                                </div>
                                 <Card type="inner">
-                                  <p>{summary.techreview}</p>
-                                </Card>
-                              </Card>
-                              <Card
-                                bordered={false}
-                                title="Personality："
-                                type="inner"
-                              >
-                                <div
-                                  style={{
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                  }}
-                                >
-                                  <h4 style={{ width: '49%' }}>
-                                    Good to work with
-                                  </h4>
-                                  <Rate value={summary.workwith} disabled />
-                                </div>
-                                <Card type="inner">
-                                  <p>{summary.perstyreview}</p>
+                                  <p style={{ whiteSpace: 'pre-line' }}>
+                                    {single_comments_3}
+                                  </p>
                                 </Card>
                               </Card>
                             </Card>
@@ -172,7 +372,6 @@ const InterviewSummaryModal = props => (
     </Connect>
   </Modal>
 );
-
 InterviewSummaryModal.propTypes = {
   testID: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
