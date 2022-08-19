@@ -11,6 +11,7 @@ import {
   Form,
   message,
   Input,
+  Table,
 } from 'antd';
 import PropTypes from 'prop-types';
 import { Connect } from 'aws-amplify-react';
@@ -20,7 +21,7 @@ import PageSpin from 'components/PageSpin';
 import QuestionComment from 'components/Summary/QuestionComment';
 import { onCreateResult } from 'graphql/subscriptions';
 import { getTest2 } from './queries';
-import createComment from 'utils/comment/comment';
+import AddNewScoreForm from 'components/Summary/AddNewScore';
 
 const toInterviewResult = data => {
   const interviewers = data.users.items.filter(x => x).map(v => v.user);
@@ -50,98 +51,8 @@ const handleSummarySubscription = (prev, { onCreateResult: newResult }) => {
   return prev;
 };
 
-const AddNewScoreForm = testid => {
-  let comment_name = '';
-  let comment_text = '';
-  let formdata = {
-    author: comment_name,
-    quality: 2,
-    completeness: 2,
-    hints: 2,
-    content: comment_text,
-  };
-
-  const questioncomment = (
-    <div>
-      {' '}
-      You can enter new comment here
-      <Form
-        onSubmit={async () => {
-          const id = testid;
-          formdata.author = comment_name;
-          formdata.content = comment_text;
-          const params = {
-            commentRecordId: id,
-            author: formdata.author,
-            quality: formdata.quality,
-            hint: formdata.hints,
-            completeness: formdata.completeness,
-            tags: 'no more comment',
-            content: formdata.content,
-          };
-          console.log(params);
-          await createComment(params);
-          message.success('Add Overall Score successfully');
-        }}
-        align={'middle'}
-      >
-        <Col>
-          <Rate
-            onChange={new_val => {
-              formdata.quality = new_val;
-              console.log(formdata);
-            }}
-          >
-            Code quality
-          </Rate>
-        </Col>
-        <Col>
-          <Rate
-            onChange={new_val => {
-              formdata.compeleteness = new_val;
-              console.log(formdata);
-            }}
-          >
-            Compeleteness
-          </Rate>
-        </Col>
-        <Col>
-          <Rate
-            onChange={new_val => {
-              formdata.hints = new_val;
-              console.log(formdata);
-            }}
-          >
-            How much hints
-          </Rate>
-        </Col>
-        <Col>
-          <Input
-            onChange={e => {
-              comment_name = e.target.value;
-            }}
-          />
-          Please leave your name
-        </Col>
-        <Col>
-          <Input
-            onChange={e => {
-              comment_text = e.target.value;
-            }}
-          />
-          Please leave your comment
-        </Col>
-        <Button type="primary" htmlType="submit">
-          Add a Score
-        </Button>
-      </Form>
-    </div>
-  );
-  return questioncomment;
-};
-
 const InterviewSummaryModal = props => (
-  // this gave me a inspiration: upper area is tfor data storage
+  // this gave me a inspiration: upper area is tfor data storages
 
   <Modal
     title={props.title}
@@ -164,6 +75,7 @@ const InterviewSummaryModal = props => (
         let comments = [];
         let summaries = [];
         let records = [];
+        let questionid = '';
         if (data && !loading && !error) {
           const interviewResult = toInterviewResult(test);
           interviewers = interviewResult.interviewers;
@@ -171,14 +83,20 @@ const InterviewSummaryModal = props => (
           comments = interviewResult.comments;
           summaries = interviewResult.summaries;
           records = data.getTest.records.items;
+          console.log('processed', records, 'datasource', data);
+          questionid = data.getTest.records.items[0].id;
         }
         let comment_count = 1;
         let new_score = '';
-        if (comments.length === 0) {
+        if (comments.length === 0 && data) {
           try {
-            new_score = AddNewScoreForm(data.getTest.records.items[0].id);
+            new_score = (
+              <>
+                <AddNewScoreForm questionid={questionid}></AddNewScoreForm>
+              </>
+            );
           } catch (e) {
-            new_score = '';
+            console.log(e);
           }
         } else {
           new_score = '';
@@ -199,107 +117,26 @@ const InterviewSummaryModal = props => (
 
             {!loading && test && (
               <>
-                <Typography.Title level={4}>
-                  Overall Score by Interviewer
-                </Typography.Title>
+                <Typography.Title level={4}>Overall Score</Typography.Title>
 
                 <div>{new_score}</div>
 
                 {comments.map(comment => {
                   let questioncomment = '';
-                  console.log('identity check', comments.length, comment_count);
                   if (comments.length === comment_count) {
-                    let comment_name = '';
-                    let comment_text = '';
-                    let formdata = {
-                      author: comment_name,
-                      quality: 2,
-                      completeness: 2,
-                      hints: 2,
-                      content: comment_text,
-                    };
-
+                    //if last comment
                     questioncomment = (
-                      <div>
-                        {' '}
+                      <>
                         <QuestionComment
                           interviewer={comment.author}
                           questions={[questions[0]]}
                           comments={[comment]}
                         />
-                        You can enter new comment here
-                        <Form
-                          onSubmit={async () => {
-                            console.log(formdata);
-                            formdata.author = comment_name;
-                            formdata.content = comment_text;
-                            const id = data.getTest.records.items[0].id;
-                            const params = {
-                              commentRecordId: id,
-                              author: formdata.author,
-                              quality: formdata.quality,
-                              hint: formdata.hints,
-                              completeness: formdata.completeness,
-                              tags: 'no more comment',
-                              content: formdata.content,
-                            };
-                            console.log(params);
-                            await createComment(params);
-                            message.success('Add Overall Score successfully');
-                          }}
-                          align={'middle'}
-                        >
-                          <Col>
-                            <Rate
-                              onChange={new_val => {
-                                formdata.quality = new_val;
-                                console.log(formdata);
-                              }}
-                            >
-                              Code quality
-                            </Rate>
-                          </Col>
-                          <Col>
-                            <Rate
-                              onChange={new_val => {
-                                formdata.compeleteness = new_val;
-                                console.log(formdata);
-                              }}
-                            >
-                              Compeleteness
-                            </Rate>
-                          </Col>
-                          <Col>
-                            <Rate
-                              onChange={new_val => {
-                                formdata.hints = new_val;
-                                console.log(formdata);
-                              }}
-                            >
-                              How much hints
-                            </Rate>
-                          </Col>
-                          <Col>
-                            <Input
-                              onChange={e => {
-                                comment_name = e.target.value;
-                              }}
-                            />
-                            Please leave your name
-                          </Col>
-                          <Col>
-                            <Input
-                              onChange={e => {
-                                comment_text = e.target.value;
-                              }}
-                            />
-                            Please leave your comment
-                          </Col>
-                          <Button type="primary" htmlType="submit">
-                            Add a Score
-                          </Button>
-                        </Form>
-                      </div>
+                        <h2>You can enter new comment here</h2>
+                        <AddNewScoreForm
+                          questionid={questionid}
+                        ></AddNewScoreForm>
+                      </>
                     );
                   } else {
                     questioncomment = (
@@ -313,52 +150,60 @@ const InterviewSummaryModal = props => (
                   comment_count = comment_count + 1;
                   return questioncomment;
                 })}
-                <Typography.Title level={4}>
-                  Comments by questions
-                </Typography.Title>
+                <br></br>
+                <br></br>
+                <Typography.Title level={4}>Comments</Typography.Title>
                 <Row type="flex" justify="space-around">
                   {records.map(record => {
+                    console.log(record);
                     const single_question = record.ques;
                     const single_history = record.history.items;
                     const single_comments = single_history.map(
                       x => x.snapComments,
                     );
                     let all_comments = '';
+                    let table_data = [];
+                    const columns = [
+                      {
+                        title: 'Author',
+                        dataIndex: 'Author',
+                        key: 'Author',
+                      },
+                      {
+                        title: 'Content',
+                        dataIndex: 'Content',
+                        key: 'Content',
+                      },
+                    ];
                     const single_comments_2 = single_comments.map(x => x.items);
                     const single_comments_3 = single_comments_2.map(x =>
-                      x.map(y =>
+                      x.map(y => {
+                        table_data.push({
+                          Author: y.author,
+                          Content: y.content,
+                        });
                         all_comments.concat(
                           y.author,
                           '  :  ',
                           y.content,
                           '  ',
                           '\n',
-                        ),
-                      ),
+                        );
+                      }),
                     );
                     return (
-                      <Col key={single_question.id} span={50}>
+                      <Col key={single_question.id} span={10}>
                         <Row type="flex" align="middle" justify="space-around">
                           <h3>Questions：{single_question.name}</h3>
                         </Row>
                         <Row>
-                          {record ? (
-                            <Card>
-                              <Card
-                                bordered={false}
-                                title="Comments of Interviewers："
-                                type="inner"
-                              >
-                                <Card type="inner">
-                                  <p style={{ whiteSpace: 'pre-line' }}>
-                                    {single_comments_3}
-                                  </p>
-                                </Card>
-                              </Card>
-                            </Card>
-                          ) : (
-                            <Empty description="No Comment Yet..." />
-                          )}
+                          <Table
+                            width={40}
+                            dataSource={table_data}
+                            columns={columns}
+                            pagination={false}
+                            style={{ height: '300px', overflowY: 'auto' }}
+                          />
                         </Row>
                       </Col>
                     );

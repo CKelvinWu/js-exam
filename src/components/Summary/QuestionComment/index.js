@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Row, Col, Rate, Icon, Divider, Typography } from 'antd';
+import { Row, Col, Rate, Icon, Divider, Typography, Comment } from 'antd';
 
 class QuestionComment extends React.Component {
   render() {
@@ -13,51 +13,44 @@ class QuestionComment extends React.Component {
 
     return (
       <>
-        <h3>Interviewer：{interviewer}</h3>
+        <h3 style={{ fontSize: 20 }}>Interviewer：{interviewer}</h3>
         {questions.map((ques, index) => {
           return (
-            <Row
-              key={ques.id}
-              type="flex"
-              align="middle"
-              style={{ marginTop: '20px' }}
-            >
-              <Col span={8} offset={3}>
-                <h4>overall score</h4>
-              </Col>
-              <>
-                <Col span={4}>
-                  <h4 style={{ display: 'inline' }}> Code quality </h4>
-                </Col>
-                <Col span={8}>
+            <Row key={ques.id} type="flex" align="middle">
+              <Col>
+                <Row>
+                  <h4 style={{ display: 'inline' }}>
+                    {' '}
+                    Code Quality &nbsp;&nbsp; &nbsp;{' '}
+                  </h4>
                   <Rate value={comments[0].quality} />
-                </Col>
-                <Col span={4} offset={11}>
+                </Row>
+                <Row>
                   <h4 style={{ display: 'inline' }}> Compeleteness </h4>
-                </Col>
-                <Col span={8}>
                   <Rate value={comments[0].completeness} />
-                </Col>
-                <Col span={4} offset={11}>
+                </Row>
+                <Row>
                   <h4 style={{ display: 'inline' }}> How much hints </h4>
-                </Col>
-                <Col span={8}>
                   <Rate
                     value={comments[0].hint}
                     character={<Icon type="bulb" theme="filled" />}
                     style={{ color: 'grey' }}
                   />
-                </Col>
+                </Row>
+              </Col>
+              <>
+                <Col span={10} offset={5}>
+                  <h2 style={{ marginTop: -10 }}>Comment </h2>
 
-                <Col span={4} offset={11}>
-                  <h4 style={{ display: 'inline' }}> text comment </h4>
-                </Col>
-                <Col span={8}>
-                  <Typography
-                    character={<Icon type="bulb" theme="filled" />}
-                    style={{ color: 'grey' }}
+                  <Comment
+                    style={{
+                      height: '200px',
+                      width: '400px',
+                      overflowY: 'auto',
+                    }}
+                    type="flex"
+                    content={comments[0].content}
                   />
-                  {comments[0].content}
                 </Col>
               </>
             </Row>
