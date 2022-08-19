@@ -52,7 +52,7 @@ If you don't have the files you can create by your own.(1. by using touch comman
 ### Step 1. Install Amplify-cli
 
 1. Run the command `npm i -g @aws-amplify/cli@4.13.1`  if not working please install amplify cli updated by `npm i -g @aws-amplify/cli` 
-
+(It takes few minutes around 180mb)
 2. Run the command `amplify` and make sure it will show usage information
 ![Screen Shot 2022-07-11 at 11 07 28 AM](https://user-images.githubusercontent.com/56998170/178195305-b7fc1c35-5004-4c51-981b-aea4bc357844.png)
 
@@ -82,7 +82,7 @@ it will require your `key_id` and `access_key` and make an `.aws` folder with cr
 
 
 2. Then redo the `amplify init` 
-3. your `app_id` in `team-provider-info.json` shoud be updated with  with the Amplify Studio app_id(can be found in amplify->edit_backend) \
+3. your `app_id` in `team-provider-info.json` shoud be updated with  with the Amplify Studio app_id(can be found in amplify->edit_backend) 
 
 ![Screen Shot 2022-07-11 at 11 37 33 AM](https://user-images.githubusercontent.com/56998170/178195560-eb265ffd-3918-490b-a739-9145fd083a47.png)
 
@@ -91,7 +91,7 @@ it will require your `key_id` and `access_key` and make an `.aws` folder with cr
 
 ![Screen Shot 2022-07-13 at 1 17 05 PM](https://user-images.githubusercontent.com/56998170/178656251-1b9f2e35-6b3f-45e6-b059-cad3c2935acd.png)   
 
-2. Then do the `amplify init`, there will be some prompt questons as below: \
+2. Then do the `amplify init`, there will be some prompt questons as below: 
 	* **? Enter a name  for the environment `dev`  
 	* **? Please choose a authentication method: `AWS Profile`  
 	* **? Do you want to update code for your updated GraphQL API? `No`  
@@ -99,21 +99,21 @@ it will require your `key_id` and `access_key` and make an `.aws` folder with cr
 	!!!!!!!!DO NOT UPDATE GraphQL API!!!!!!  
         Reasons are as following: The new version of amplify provide several new functionalities, but it require the conflict resolver function, The schema was designed under old version of Amplify, and turn on this functionality will cause the app not be able to do the `UPDATE` and `DELETE` queries.
 	
-3. If you finish the amplify init, please doubble confirm the conflict resoultion function is closed by: \
-	type `amplify update api`
+3. If you finish the amplify init, please doubble confirm the conflict resoultion function is closed by: 
+	type `amplify update api` \
 	* **? Select from one of the below mentioned services:`GraphQL`
 	
         * **Your terminal should prompt the current setting of api, the Conflict detection should be disabled
 	
-	![Screen Shot 2022-07-13 at 1 47 13 PM](https://user-images.githubusercontent.com/56998170/178659886-8932e890-448d-4dd8-8d12-01ba9693a27a.png) \
+	![Screen Shot 2022-07-13 at 1 47 13 PM](https://user-images.githubusercontent.com/56998170/178659886-8932e890-448d-4dd8-8d12-01ba9693a27a.png) 
 	
-	If you see the `Conflict Resolution` is set in other mode, please select `Disable conflict resolution` and type \    
+	* ** If you see the `Conflict Resolution` is set in other mode, please select `Disable conflict resolution` and type     
 	`amplify push` to make sure your setting is pushed to cloud. 
 
 4. After you finish all the setup you can run `npm start` to see if the app working on localhost
 
 ### Step 4- User Creation
-1. Now move to Amazon Cognito service, create a new user(usally called Admin), your new account will be in `Force to update password` status
+1. In order to login your app, you need a user account. Now navigate to Amazon Cognito service(Services->Cognito), create a new user(usally called Admin), your new account will be in `Force to update password` status
 2. then type `aws cognito-idp admin-set-user-password \
   --user-pool-id <your-user-pool-id> \
   --username <username> \
@@ -121,12 +121,13 @@ it will require your `key_id` and `access_key` and make an `.aws` folder with cr
   --permanent` 
   
 3. Refresh the page, your user status should be confirmed now
+4. Do not forget to create a Interviewee account, it is required for interviewee to successfully
 
 ### Step 5 - Deployment
 1. After the amplify init is finished, type  `npm run build` 
 2. then type  `npm run deploy`
-NOTICE: if the `npm deploy` has fatal: remote hang up error , try it in other network environment (i.g personal hotspot)
-3. Use the username and password you created and go to https://innovap3.github.io/js-exam/, now you can login.
+NOTICE: if the `npm run deploy` has fatal: remote hang up error , try it in other network environment (i.g personal hotspot)
+3. Use the username and password you created in step 4 and go to https://innovap3.github.io/js-exam/, now you can login.
 
 -------------
 
