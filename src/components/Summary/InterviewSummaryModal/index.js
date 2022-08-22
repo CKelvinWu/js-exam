@@ -52,8 +52,6 @@ const handleSummarySubscription = (prev, { onCreateResult: newResult }) => {
 };
 
 const InterviewSummaryModal = props => (
-  // this gave me a inspiration: upper area is tfor data storages
-
   <Modal
     title={props.title}
     visible={props.visible}
@@ -83,8 +81,8 @@ const InterviewSummaryModal = props => (
           comments = interviewResult.comments;
           summaries = interviewResult.summaries;
           records = data.getTest.records.items;
-          console.log('processed', records, 'datasource', data);
           questionid = data.getTest.records.items[0].id;
+          comments.sort((a, b) => a.time.localeCompare(b.time));
         }
         let comment_count = 1;
         let new_score = '';
@@ -155,13 +153,11 @@ const InterviewSummaryModal = props => (
                 <Typography.Title level={4}>Comments</Typography.Title>
                 <Row type="flex" justify="space-around">
                   {records.map(record => {
-                    console.log(record);
                     const single_question = record.ques;
                     const single_history = record.history.items;
                     const single_comments = single_history.map(
                       x => x.snapComments,
                     );
-                    let all_comments = '';
                     let table_data = [];
                     const columns = [
                       {
@@ -181,16 +177,11 @@ const InterviewSummaryModal = props => (
                         table_data.push({
                           Author: y.author,
                           Content: y.content,
+                          Time: y.time,
                         });
-                        all_comments.concat(
-                          y.author,
-                          '  :  ',
-                          y.content,
-                          '  ',
-                          '\n',
-                        );
                       }),
                     );
+                    table_data.sort((a, b) => a.Time.localeCompare(b.Time));
                     return (
                       <Col key={single_question.id} span={10}>
                         <Row type="flex" align="middle" justify="space-around">

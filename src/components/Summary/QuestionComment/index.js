@@ -21,21 +21,21 @@ class QuestionComment extends React.Component {
                 <Row>
                   <h4 style={{ display: 'inline' }}>
                     {' '}
-                    Code Quality &nbsp;&nbsp; &nbsp;{' '}
+                    Skills
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{' '}
                   </h4>
                   <Rate value={comments[0].quality} />
                 </Row>
                 <Row>
-                  <h4 style={{ display: 'inline' }}> Compeleteness </h4>
+                  <h4 style={{ display: 'inline' }}>
+                    {' '}
+                    Potential &nbsp; &nbsp;{' '}
+                  </h4>
                   <Rate value={comments[0].completeness} />
                 </Row>
                 <Row>
-                  <h4 style={{ display: 'inline' }}> How much hints </h4>
-                  <Rate
-                    value={comments[0].hint}
-                    character={<Icon type="bulb" theme="filled" />}
-                    style={{ color: 'grey' }}
-                  />
+                  <h4 style={{ display: 'inline' }}> Adaptability </h4>
+                  <Rate value={comments[0].hint} />
                 </Row>
               </Col>
               <>

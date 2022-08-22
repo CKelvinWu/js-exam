@@ -33,7 +33,6 @@ class AddNewScoreForm extends React.Component {
                 tags: 'no more comment',
                 content: formdata.content,
               };
-              console.log(params);
               await createComment(params);
               message.success('Add Overall Score successfully');
             }}
@@ -52,36 +51,33 @@ class AddNewScoreForm extends React.Component {
               <br></br>
               <Row>
                 <Col>
-                  Code quality &nbsp;&nbsp; &nbsp;
+                  Skills &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;
                   <Rate
                     allowHalf
                     onChange={new_val => {
                       formdata.quality = new_val;
-                      console.log(formdata);
                     }}
                   ></Rate>
                 </Col>
               </Row>
               <Row>
                 <Col>
-                  Compeleteness
+                  Potential &nbsp; &nbsp;
                   <Rate
                     allowHalf
                     onChange={new_val => {
                       formdata.compeleteness = new_val;
-                      console.log(formdata);
                     }}
                   ></Rate>
                 </Col>
               </Row>
               <Row>
                 <Col>
-                  How much hints
+                  Adaptability
                   <Rate
                     allowHalf
                     onChange={new_val => {
                       formdata.hints = new_val;
-                      console.log(formdata);
                     }}
                   ></Rate>
                 </Col>
