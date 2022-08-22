@@ -32,7 +32,6 @@ export function createSnapComment(data, callback) {
       }
     }
     // End
-    console.log('this is what I got for testID', latestHistoryId);
     if (latestHistoryId) {
       try {
         const params = {
