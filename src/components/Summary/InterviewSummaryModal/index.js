@@ -1,27 +1,15 @@
 import React from 'react';
-import {
-  Typography,
-  Modal,
-  Row,
-  Col,
-  Card,
-  Rate,
-  Empty,
-  Button,
-  Form,
-  message,
-  Input,
-  Table,
-} from 'antd';
+import { Typography, Modal, Row, Col, Table } from 'antd';
 import PropTypes from 'prop-types';
 import { Connect } from 'aws-amplify-react';
-import { API, graphqlOperation } from 'aws-amplify';
+import { graphqlOperation } from 'aws-amplify';
 import PageEmpty from 'components/PageEmpty';
 import PageSpin from 'components/PageSpin';
 import QuestionComment from 'components/Summary/QuestionComment';
 import { onCreateResult } from 'graphql/subscriptions';
 import { getTest2 } from './queries';
 import AddNewScoreForm from 'components/Summary/AddNewScore';
+import AddNewScoreRedux from 'components/Summary/AddNewScoreRedux';
 
 const toInterviewResult = data => {
   const interviewers = data.users.items.filter(x => x).map(v => v.user);
@@ -84,21 +72,12 @@ const InterviewSummaryModal = props => (
           questionid = data.getTest.records.items[0].id;
           comments.sort((a, b) => a.time.localeCompare(b.time));
         }
-        let comment_count = 1;
         let new_score = '';
-        if (comments.length === 0 && data) {
-          try {
-            new_score = (
-              <>
-                <AddNewScoreForm questionid={questionid}></AddNewScoreForm>
-              </>
-            );
-          } catch (e) {
-            console.log(e);
-          }
-        } else {
-          new_score = '';
-        }
+        new_score = (
+          <>
+            <AddNewScoreRedux questionid={questionid}></AddNewScoreRedux>
+          </>
+        );
         ////////////////////////////data part//////////////////
         return (
           <PageSpin spinning={loading}>
@@ -116,72 +95,63 @@ const InterviewSummaryModal = props => (
             {!loading && test && (
               <>
                 <Typography.Title level={4}>Overall Score</Typography.Title>
-
-                <div>{new_score}</div>
-
                 {comments.map(comment => {
-                  let questioncomment = '';
-                  if (comments.length === comment_count) {
-                    //if last comment
-                    questioncomment = (
-                      <>
-                        <QuestionComment
-                          interviewer={comment.author}
-                          questions={[questions[0]]}
-                          comments={[comment]}
-                        />
-                        <h2>You can enter new comment here</h2>
-                        <AddNewScoreForm
-                          questionid={questionid}
-                        ></AddNewScoreForm>
-                      </>
-                    );
-                  } else {
-                    questioncomment = (
+                  const questioncomment = (
+                    <>
                       <QuestionComment
                         interviewer={comment.author}
-                        questions={[questions]}
+                        questions={[questions[0]]}
                         comments={[comment]}
                       />
-                    );
-                  }
-                  comment_count = comment_count + 1;
+                    </>
+                  );
+
                   return questioncomment;
                 })}
                 <br></br>
+                {new_score}
                 <br></br>
                 <Typography.Title level={4}>Comments</Typography.Title>
                 <Row type="flex" justify="space-around">
                   {records.map(record => {
-                    const single_question = record.ques;
-                    const single_history = record.history.items;
-                    const single_comments = single_history.map(
-                      x => x.snapComments,
-                    );
-                    let table_data = [];
+                    let wrap_data = [];
                     const columns = [
                       {
                         title: 'Author',
                         dataIndex: 'Author',
                         key: 'Author',
+                        sorter: (a, b) => a.Author.localeCompare(b.Author),
+                        sortDirections: ['descend', 'ascend'],
                       },
                       {
                         title: 'Content',
                         dataIndex: 'Content',
                         key: 'Content',
                       },
+                      {
+                        title: 'Time',
+                        dataIndex: 'Time',
+                        key: 'Time',
+                        sorter: (a, b) => a.Time.localeCompare(b.Time),
+                        sortDirections: ['descend', 'ascend'],
+                      },
                     ];
-                    const single_comments_2 = single_comments.map(x => x.items);
-                    const single_comments_3 = single_comments_2.map(x =>
-                      x.map(y => {
-                        table_data.push({
-                          Author: y.author,
-                          Content: y.content,
-                          Time: y.time,
+                    const onChange = (pagination, filters, sorter, extra) => {
+                      console.log('params', pagination, filters, sorter, extra);
+                    };
+                    const single_question = record.ques;
+                    const wrap_table = record.history.items
+                      .map(x => x.snapComments)
+                      .map(y => y.items)
+                      .flat()
+                      .map(z => {
+                        wrap_data.push({
+                          Author: z.author,
+                          Content: z.content,
+                          Time: z.time.substring(11, 16),
                         });
-                      }),
-                    );
-                    table_data.sort((a, b) => a.Time.localeCompare(b.Time));
+                      });
+                    wrap_table.sort((a, b) => a.Time.localeCompare(b.Time));
                     return (
                       <Col key={single_question.id} span={10}>
                         <Row type="flex" align="middle" justify="space-around">
@@ -190,9 +160,10 @@ const InterviewSummaryModal = props => (
                         <Row>
                           <Table
                             width={40}
-                            dataSource={table_data}
+                            dataSource={wrap_data}
                             columns={columns}
                             pagination={false}
+                            onChange={onChange}
                             style={{ height: '300px', overflowY: 'auto' }}
                           />
                         </Row>

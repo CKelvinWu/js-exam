@@ -24,18 +24,18 @@ class QuestionComment extends React.Component {
                     Skills
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{' '}
                   </h4>
-                  <Rate value={comments[0].quality} />
+                  <Rate allowHalf value={comments[0].quality} />
                 </Row>
                 <Row>
                   <h4 style={{ display: 'inline' }}>
                     {' '}
                     Potential &nbsp; &nbsp;{' '}
                   </h4>
-                  <Rate value={comments[0].completeness} />
+                  <Rate allowHalf value={comments[0].completeness} />
                 </Row>
                 <Row>
                   <h4 style={{ display: 'inline' }}> Adaptability </h4>
-                  <Rate value={comments[0].hint} />
+                  <Rate allowHalf value={comments[0].hint} />
                 </Row>
               </Col>
               <>
