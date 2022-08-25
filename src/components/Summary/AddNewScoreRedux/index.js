@@ -1,10 +1,11 @@
 import React, { PureComponent } from 'react';
-import { Rate } from 'antd';
+import { Rate, Row, Col, Divider, Typography } from 'antd';
 
 import reduxForm from 'redux-form/es/reduxForm';
 import Field from 'redux-form/es/Field';
 import { Button, message, Form } from 'antd';
 import createComment from 'utils/comment/comment';
+const { Text, Link } = Typography;
 
 //
 const FieldizeRate = () => ({
@@ -24,7 +25,7 @@ const FieldizeRate = () => ({
       hasFeedback={hasFeedback && hasError}
       help={hasError && meta.error}
     >
-      <Rate allowHalf {...input} {...rest} children={children} />
+      <Rate style={{}} allowHalf {...input} {...rest} children={children} />
     </FormItem>
   );
 };
@@ -36,7 +37,6 @@ class AddNewScoreFormRedux extends React.Component {
     super(props);
     this.state = { DisableSubmit: true };
     this.submitForm = this.props.handleSubmit(async data => {
-      console.log(data);
       const id = this.props.questionid;
       const params = {
         commentRecordId: id,
@@ -47,54 +47,189 @@ class AddNewScoreFormRedux extends React.Component {
         tags: 'no more comment',
         content: data.comment,
       };
-      console.log('send para', params);
       await createComment(params);
       message.success('Add Overall Score successfully');
       this.props.reset();
     });
   }
   onDetectNullAuthor = e => {
-    console.log(e.target.value);
     if (e.target.value.length === 0) {
       this.setState({ DisableSubmit: true });
       console.log(this.state.DisableSubmit);
     } else {
       this.setState({ DisableSubmit: false });
-      console.log(this.state.DisableSubmit);
     }
   };
   render() {
     return (
-      <div>
-        <label>REDUX area test</label>
+      <>
+        <Row type="flex" align="middle">
+          <h3 style={{ fontSize: 20, align: 'middle' }}>Interviewer：</h3>
+          <Field
+            name="name"
+            component="input"
+            type="text"
+            placeholder="please leave your name"
+            onChange={this.onDetectNullAuthor}
+            style={{ width: '240px', marginTop: '-10px' }}
+          />
+        </Row>
         <form onSubmit={this.submitForm}>
-          <div>
+          <Row type="flex" align="middle">
+            <Col type="flex">
+              <Row>
+                <h4 style={{ display: 'inline', marginButtom: '50px' }}>
+                  {' '}
+                  Skills
+                </h4>
+                <Field
+                  style={{ marginLeft: '140px', marginBu: '60px' }}
+                  name="quality"
+                  component={RateScore}
+                />
+              </Row>
+              <Row>
+                <h4 style={{ display: 'inline' }}> Potential</h4>
+                <Field
+                  style={{ marginLeft: '140px', marginButtom: '-120px' }}
+                  name="completeness"
+                  component={RateScore}
+                />
+              </Row>
+              <Row>
+                <h4 style={{ display: 'inline' }}> Adaptability </h4>
+                <Field
+                  name="hint"
+                  style={{ marginLeft: '140px' }}
+                  component={RateScore}
+                />
+              </Row>
+            </Col>
+            <>
+              <Col span={10} offset={5}>
+                <h2 style={{ marginButtom: '200px' }}>Comment </h2>
+
+                <Field
+                  name="comment"
+                  component="input"
+                  type="text"
+                  placeholder="please leave your comment"
+                  style={{ height: '200px', width: '400px' }}
+                />
+              </Col>
+              <Row>
+                <Button htmlType="submit" visible={this.state.DisableSubmit}>
+                  {' '}
+                  Add Score{' '}
+                </Button>
+              </Row>
+            </>
+          </Row>
+        </form>
+      </>
+    );
+  }
+}
+export default reduxForm({ form: 'AddScore' })(AddNewScoreFormRedux);
+/*
+<form onSubmit={this.submitForm}>
+<Row key={ques.id} type="flex" align="middle">
+              <Col>
+                <Row>
+                  <h4 style={{ display: 'inline' }}>
+                    {' '}
+                    Skills
+                  </h4>
+              <Field style={{marginLeft:"140px"}} name="quality" component={RateScore} />
+                </Row>
+                <Row>
+                  <h4 style={{ display: 'inline' }}>
+                    {' '}
+                    Potential 
+                  </h4>
+              <Field style={{marginLeft:"140px",marginButtom:"120px"}} name="completeness" component={RateScore} />
+                </Row>
+                <Row>
+                  <h4 style={{ display: 'inline' }}> Adaptability </h4>
+              <Field name="hint" style={{marginLeft:"140px"}} component={RateScore} />
+                </Row>
+              </Col>
+                <>
+                <Col span={10} offset={5}>
+                  <h2 style={{ marginButtom:50 }}>Comment </h2>
+
+                  <Field
+              name="comment"
+              component="input"
+              type="text"
+              placeholder="please leave your comment"
+              style={{height:"200px",
+                      width:"400px",
+              }}
+            />
+                </Col>
+                <Row>
+                <Button htmlType="submit" visible={this.state.DisableSubmit}>
+            {' '}
+            Add Score{' '}
+          </Button>
+                </Row>
+              </>
+            </Row>
+          </form>
+
+*/
+/*
+<form onSubmit={this.submitForm}>
+        <Divider orientation="left"></Divider>
+
+        <Row type="flex" align="middle">          
+           <h3 style={{ fontSize: 20,align:"middle" }}>Interviewer：</h3>
             <Field
               name="name"
               component="input"
               type="text"
               placeholder="please leave your name"
               onChange={this.onDetectNullAuthor}
+              style={{}}
             />
-          </div>
-          <Field name="quality" component={RateScore} />
-          <Field name="completeness" component={RateScore} />
-          <Field name="hint" component={RateScore} />
-          <div>
+
+        </Row>
+          <Row type="flex" align="middle" style={{marginTop:"60px"}}>
+            <Col type="flex">
+            <Row >
+              <Text style={{fontSize:"20px",display:"inline"}}>Skills</Text>
+              <Field style={{marginLeft:"140px"}} name="quality" component={RateScore} />
+            </Row>
+            <Row >
+              <Text style={{fontSize:"20px", display: 'inline'}}>Potential</Text>
+              <Field style={{marginLeft:"140px",marginButtom:"120px"}} name="completeness" component={RateScore} />
+
+            </Row >
+            <Row >
+              <p style={{ fontSize:"20px",display: 'inline',marginTop:"20px"}}> Adaptability </p>
+
+              <Field name="hint" style={{marginLeft:"140px"}} component={RateScore} />
+
+            </Row>
+            </Col>
+            
+          </Row>
+          <Col>
             <Field
               name="comment"
               component="input"
               type="text"
               placeholder="please leave your comment"
+              style={{height:"200px",
+                      width:"400px",
+              }}
             />
-          </div>
-          <Button htmlType="submit" visible={this.state.DisableSubmit}>
+            <Button htmlType="submit" visible={this.state.DisableSubmit}>
             {' '}
             Add Score{' '}
           </Button>
+          </Col>
+          
         </form>
-      </div>
-    );
-  }
-}
-export default reduxForm({ form: 'AddScore' })(AddNewScoreFormRedux);
+*/

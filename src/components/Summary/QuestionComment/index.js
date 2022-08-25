@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col, Rate, Icon, Divider, Typography, Comment } from 'antd';
+import { Connect } from 'aws-amplify-react';
+import { API, graphqlOperation } from 'aws-amplify';
+import { onCreateComment } from 'graphql/subscriptions';
 
 class QuestionComment extends React.Component {
   render() {
@@ -10,7 +13,6 @@ class QuestionComment extends React.Component {
         <h4 style={{ display: 'inline', color: 'red' }}>Not Available !</h4>
       );
     }
-
     return (
       <>
         <h3 style={{ fontSize: 20 }}>Interviewer：{interviewer}</h3>
@@ -19,28 +21,33 @@ class QuestionComment extends React.Component {
             <Row key={ques.id} type="flex" align="middle">
               <Col>
                 <Row>
-                  <h4 style={{ display: 'inline' }}>
-                    {' '}
-                    Skills
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{' '}
-                  </h4>
-                  <Rate allowHalf value={comments[0].quality} />
+                  <h4 style={{ display: 'inline' }}> Skills</h4>
+                  <Rate
+                    style={{ marginLeft: '140px' }}
+                    allowHalf
+                    value={comments[0].quality}
+                  />
                 </Row>
                 <Row>
-                  <h4 style={{ display: 'inline' }}>
-                    {' '}
-                    Potential &nbsp; &nbsp;{' '}
-                  </h4>
-                  <Rate allowHalf value={comments[0].completeness} />
+                  <h4 style={{ display: 'inline' }}> Potential</h4>
+                  <Rate
+                    style={{ marginLeft: '120px' }}
+                    allowHalf
+                    value={comments[0].completeness}
+                  />
                 </Row>
                 <Row>
                   <h4 style={{ display: 'inline' }}> Adaptability </h4>
-                  <Rate allowHalf value={comments[0].hint} />
+                  <Rate
+                    style={{ marginLeft: '100px' }}
+                    allowHalf
+                    value={comments[0].hint}
+                  />
                 </Row>
               </Col>
               <>
                 <Col span={10} offset={5}>
-                  <h2 style={{ marginTop: -10 }}>Comment </h2>
+                  <h2 style={{ marginButtom: 50 }}>Comment </h2>
 
                   <Comment
                     style={{

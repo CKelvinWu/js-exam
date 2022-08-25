@@ -2,13 +2,12 @@ import React from 'react';
 import { Typography, Modal, Row, Col, Table } from 'antd';
 import PropTypes from 'prop-types';
 import { Connect } from 'aws-amplify-react';
-import { graphqlOperation } from 'aws-amplify';
+import { API, graphqlOperation } from 'aws-amplify';
 import PageEmpty from 'components/PageEmpty';
 import PageSpin from 'components/PageSpin';
 import QuestionComment from 'components/Summary/QuestionComment';
-import { onCreateResult } from 'graphql/subscriptions';
+import { onCreateResult, onCreateComment } from 'graphql/subscriptions';
 import { getTest2 } from './queries';
-import AddNewScoreForm from 'components/Summary/AddNewScore';
 import AddNewScoreRedux from 'components/Summary/AddNewScoreRedux';
 
 const toInterviewResult = data => {
@@ -38,6 +37,18 @@ const handleSummarySubscription = (prev, { onCreateResult: newResult }) => {
   prev.getTest.results.items.push(newResult);
   return prev;
 };
+const handleScoreSubscription = (prev, { onCreateComment: newComment }) => {
+  const new_data = {
+    author: newComment.author,
+    completeness: newComment.completeness,
+    content: newComment.content,
+    hint: newComment.hint,
+    quality: newComment.quality,
+    time: newComment.time,
+  };
+  prev.getTest.records.items[0].comment.items.push(new_data);
+  return prev;
+};
 
 const InterviewSummaryModal = props => (
   <Modal
@@ -51,8 +62,8 @@ const InterviewSummaryModal = props => (
       query={graphqlOperation(getTest2, {
         id: props.testID,
       })}
-      subscription={graphqlOperation(onCreateResult)}
-      onSubscriptionMsg={handleSummarySubscription}
+      subscription={graphqlOperation(onCreateComment)}
+      onSubscriptionMsg={handleScoreSubscription}
     >
       {({ data, loading, error }) => {
         const test = data && data.getTest;
@@ -78,6 +89,27 @@ const InterviewSummaryModal = props => (
             <AddNewScoreRedux questionid={questionid}></AddNewScoreRedux>
           </>
         );
+        /*const record_subscription = API.graphql(
+          graphqlOperation(onCreateComment)
+        ).subscribe({
+          next: ( provider, value )=> { 
+            if(typeof lastname !== "undefined"){
+              let new_value={
+                author:value.data.onCreateComment.author,
+                completeness:value.data.onCreateComment.completeness,
+                content:value.data.onCreateComment.content,
+                hint:value.data.onCreateComment.hint,
+                quality:value.data.onCreateComment.quality,
+                time:value.data.onCreateComment.time
+
+
+              }
+              records[0].comment.items.push(new_value)
+              
+            }
+          },
+          error: (error) => console.warn(error)
+        });*/
         ////////////////////////////data part//////////////////
         return (
           <PageSpin spinning={loading}>
