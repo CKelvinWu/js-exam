@@ -187,7 +187,9 @@ const InterviewSummaryModal = props => (
                     return (
                       <Col key={single_question.id} span={10}>
                         <Row type="flex" align="middle" justify="space-around">
-                          <h3>Questions：{single_question.name}</h3>
+                          <h3 style={{ marginTop: '50px' }}>
+                            Questions：{single_question.name}
+                          </h3>
                         </Row>
                         <Row>
                           <Table

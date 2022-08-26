@@ -46,8 +46,13 @@ class QuestionComment extends React.Component {
                 </Row>
               </Col>
               <>
-                <Col span={10} offset={5}>
-                  <h2 style={{ marginButtom: 50 }}>Comment </h2>
+                <Col
+                  type="flex"
+                  span={10}
+                  offset={5}
+                  style={{ marginTop: '-40px' }}
+                >
+                  <h2 style={{ marginButtom: '200px' }}>Comment </h2>
 
                   <Comment
                     style={{

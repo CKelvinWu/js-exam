@@ -55,7 +55,6 @@ class AddNewScoreFormRedux extends React.Component {
   onDetectNullAuthor = e => {
     if (e.target.value.length === 0) {
       this.setState({ DisableSubmit: true });
-      console.log(this.state.DisableSubmit);
     } else {
       this.setState({ DisableSubmit: false });
     }
@@ -77,36 +76,40 @@ class AddNewScoreFormRedux extends React.Component {
         <form onSubmit={this.submitForm}>
           <Row type="flex" align="middle">
             <Col type="flex">
-              <Row>
-                <h4 style={{ display: 'inline', marginButtom: '50px' }}>
-                  {' '}
+              <Row type="flex">
+                <h4 style={{ display: 'inline', marginButtom: '20px' }}>
                   Skills
                 </h4>
                 <Field
-                  style={{ marginLeft: '140px', marginBu: '60px' }}
+                  style={{ marginLeft: '140px', marginButtom: '60px' }}
                   name="quality"
                   component={RateScore}
                 />
               </Row>
-              <Row>
+              <Row type="flex">
                 <h4 style={{ display: 'inline' }}> Potential</h4>
                 <Field
-                  style={{ marginLeft: '140px', marginButtom: '-120px' }}
+                  style={{ marginLeft: '120px', marginButtom: '-120px' }}
                   name="completeness"
                   component={RateScore}
                 />
               </Row>
-              <Row>
+              <Row type="flex">
                 <h4 style={{ display: 'inline' }}> Adaptability </h4>
                 <Field
                   name="hint"
-                  style={{ marginLeft: '140px' }}
+                  style={{ marginLeft: '100px' }}
                   component={RateScore}
                 />
               </Row>
             </Col>
             <>
-              <Col span={10} offset={5}>
+              <Col
+                type="flex"
+                span={10}
+                offset={5}
+                style={{ marginTop: '-40px' }}
+              >
                 <h2 style={{ marginButtom: '200px' }}>Comment </h2>
 
                 <Field
@@ -118,7 +121,12 @@ class AddNewScoreFormRedux extends React.Component {
                 />
               </Col>
               <Row>
-                <Button htmlType="submit" disabled={this.state.DisableSubmit}>
+                <Button
+                  align="middle"
+                  style={{ marginTop: '150px', marginLeft: '150px' }}
+                  htmltype=""
+                  disabled={this.state.DisableSubmit}
+                >
                   {' '}
                   Add Score{' '}
                 </Button>
