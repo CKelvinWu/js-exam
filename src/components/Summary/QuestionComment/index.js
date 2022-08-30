@@ -15,8 +15,8 @@ class QuestionComment extends React.Component {
     }
     return (
       <>
-        <h3 style={{ fontSize: 20 }}>Interviewer：{interviewer}</h3>
-        {questions.map((ques, index) => {
+        <h2>Interviewer：{interviewer}</h2>
+        {questions.map(ques => {
           return (
             <Row key={ques.id} type="flex" align="middle">
               <Col>
@@ -52,7 +52,7 @@ class QuestionComment extends React.Component {
                   offset={5}
                   style={{ marginTop: '-40px' }}
                 >
-                  <h2 style={{ marginButtom: '200px' }}>Comment </h2>
+                  <h2 style={{ marginBottom: '50px' }}>Comment </h2>
 
                   <Comment
                     style={{

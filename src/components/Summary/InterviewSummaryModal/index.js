@@ -9,6 +9,7 @@ import QuestionComment from 'components/Summary/QuestionComment';
 import { onCreateResult, onCreateComment } from 'graphql/subscriptions';
 import { getTest2 } from './queries';
 import AddNewScoreRedux from 'components/Summary/AddNewScoreRedux';
+import moment from 'moment';
 
 const toInterviewResult = data => {
   const interviewers = data.users.items.filter(x => x).map(v => v.user);
@@ -84,32 +85,33 @@ const InterviewSummaryModal = props => (
           comments.sort((a, b) => a.time.localeCompare(b.time));
         }
         let new_score = '';
+        const columns = [
+          {
+            title: 'Author',
+            dataIndex: 'Author',
+            key: 'Author',
+            sorter: (a, b) => a.Author.localeCompare(b.Author),
+            sortDirections: ['descend', 'ascend'],
+          },
+          {
+            title: 'Content',
+            dataIndex: 'Content',
+            key: 'Content',
+          },
+          {
+            title: 'Time',
+            dataIndex: 'Time',
+            key: 'Time',
+            sorter: (a, b) => a.Time.localeCompare(b.Time),
+            sortDirections: ['descend', 'ascend'],
+          },
+        ];
         new_score = (
           <>
             <AddNewScoreRedux questionid={questionid}></AddNewScoreRedux>
           </>
         );
-        /*const record_subscription = API.graphql(
-          graphqlOperation(onCreateComment)
-        ).subscribe({
-          next: ( provider, value )=> { 
-            if(typeof lastname !== "undefined"){
-              let new_value={
-                author:value.data.onCreateComment.author,
-                completeness:value.data.onCreateComment.completeness,
-                content:value.data.onCreateComment.content,
-                hint:value.data.onCreateComment.hint,
-                quality:value.data.onCreateComment.quality,
-                time:value.data.onCreateComment.time
 
-
-              }
-              records[0].comment.items.push(new_value)
-              
-            }
-          },
-          error: (error) => console.warn(error)
-        });*/
         ////////////////////////////data part//////////////////
         return (
           <PageSpin spinning={loading}>
@@ -146,44 +148,17 @@ const InterviewSummaryModal = props => (
                 <Typography.Title level={4}>Comments</Typography.Title>
                 <Row type="flex" justify="space-around">
                   {records.map(record => {
-                    let wrap_data = [];
-                    const columns = [
-                      {
-                        title: 'Author',
-                        dataIndex: 'Author',
-                        key: 'Author',
-                        sorter: (a, b) => a.Author.localeCompare(b.Author),
-                        sortDirections: ['descend', 'ascend'],
-                      },
-                      {
-                        title: 'Content',
-                        dataIndex: 'Content',
-                        key: 'Content',
-                      },
-                      {
-                        title: 'Time',
-                        dataIndex: 'Time',
-                        key: 'Time',
-                        sorter: (a, b) => a.Time.localeCompare(b.Time),
-                        sortDirections: ['descend', 'ascend'],
-                      },
-                    ];
-                    const onChange = (pagination, filters, sorter, extra) => {
-                      console.log('params', pagination, filters, sorter, extra);
-                    };
                     const single_question = record.ques;
-                    const wrap_table = record.history.items
+                    const wrap_data = record.history.items
                       .map(x => x.snapComments)
                       .map(y => y.items)
                       .flat()
-                      .map(z => {
-                        wrap_data.push({
-                          Author: z.author,
-                          Content: z.content,
-                          Time: z.time.substring(11, 16),
-                        });
-                      });
-                    wrap_table.sort((a, b) => a.Time.localeCompare(b.Time));
+                      .map(z => ({
+                        Author: z.author,
+                        Content: z.content,
+                        Time: z.time.substring(11, 16) + ' UTC -4', //If all the data is stored in same timezone, then just mark the timezone when data stored
+                      }))
+                      .sort((a, b) => a.Time.localeCompare(b.Time));
                     return (
                       <Col key={single_question.id} span={10}>
                         <Row type="flex" align="middle" justify="space-around">
@@ -197,7 +172,6 @@ const InterviewSummaryModal = props => (
                             dataSource={wrap_data}
                             columns={columns}
                             pagination={false}
-                            onChange={onChange}
                             style={{ height: '300px', overflowY: 'auto' }}
                           />
                         </Row>

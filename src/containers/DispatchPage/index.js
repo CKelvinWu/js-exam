@@ -252,7 +252,6 @@ class Page extends Component {
       message.success(`Dispatch "${question.name}" successfully.`);
       // re-subscribe the new record
       this.subscribeRecordUpdate();
-      window.location.reload();
     } catch (e) {
       console.log(e);
     } finally {
