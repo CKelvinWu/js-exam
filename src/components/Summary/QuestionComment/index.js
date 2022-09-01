@@ -23,7 +23,7 @@ class QuestionComment extends React.Component {
                 <Row>
                   <h4 style={{ display: 'inline' }}> Skills</h4>
                   <Rate
-                    style={{ marginLeft: '140px' }}
+                    style={{ marginLeft: '150px' }}
                     allowHalf
                     value={comments[0].quality}
                   />
@@ -31,7 +31,7 @@ class QuestionComment extends React.Component {
                 <Row>
                   <h4 style={{ display: 'inline' }}> Potential</h4>
                   <Rate
-                    style={{ marginLeft: '120px' }}
+                    style={{ marginLeft: '125px' }}
                     allowHalf
                     value={comments[0].completeness}
                   />

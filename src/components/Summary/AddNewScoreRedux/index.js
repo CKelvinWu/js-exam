@@ -46,7 +46,7 @@ const FieldizeComment = (height, width) => ({
       hasFeedback={hasFeedback && hasError}
       help={hasError && meta.error}
     >
-      <TextArea
+      <Input
         bordered={false}
         {...input}
         {...rest}
@@ -56,13 +56,13 @@ const FieldizeComment = (height, width) => ({
           width: widthpx,
           overflowY: 'auto',
         }}
-      ></TextArea>
+      ></Input>
     </FormItem>
   );
 };
 const RateScore = FieldizeRate();
 const CommentScore = FieldizeComment(200, 400);
-const NameScore = FieldizeComment(20, 200);
+const NameScore = FieldizeComment(40, 200);
 //Reference: https://codesandbox.io/s/jzyl70wpk?file=/SimpleForm.js:611-1048
 
 class AddNewScoreFormRedux extends React.Component {
@@ -139,7 +139,7 @@ class AddNewScoreFormRedux extends React.Component {
                   Skills
                 </h4>
                 <Field
-                  style={{ marginLeft: '140px', marginTop: '110px' }}
+                  style={{ marginLeft: '145px', marginTop: '110px' }}
                   name="quality"
                   component={RateScore}
                   onChange={this.onDetectNullValue}
