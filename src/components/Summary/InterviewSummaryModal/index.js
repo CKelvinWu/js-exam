@@ -9,7 +9,7 @@ import QuestionComment from 'components/Summary/QuestionComment';
 import { onCreateResult, onCreateComment } from 'graphql/subscriptions';
 import { getTest2 } from './queries';
 import AddNewScoreRedux from 'components/Summary/AddNewScoreRedux';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 const toInterviewResult = data => {
   const interviewers = data.users.items.filter(x => x).map(v => v.user);
@@ -85,6 +85,7 @@ const InterviewSummaryModal = props => (
           comments.sort((a, b) => a.time.localeCompare(b.time));
         }
         let new_score = '';
+        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         const columns = [
           {
             title: 'Author',
@@ -154,9 +155,20 @@ const InterviewSummaryModal = props => (
                       .map(y => y.items)
                       .flat()
                       .map(z => ({
-                        Author: z.author,
+                        Author: z.author, //2013-11-18T08:55:00-08:00
                         Content: z.content,
-                        Time: z.time.substring(11, 16) + ' UTC -4', //If all the data is stored in same timezone, then just mark the timezone when data stored
+                        Time:
+                          moment
+                            .tz(z.time.substring(0, 19), 'America/New York')
+                            .tz(timezone)
+                            .format()
+                            .substring(11, 16) +
+                          ' UTC ' +
+                          moment
+                            .tz(z.time.substring(0, 19), 'America/New York')
+                            .tz(timezone)
+                            .format()
+                            .substring(20, 25),
                       }))
                       .sort((a, b) => a.Time.localeCompare(b.Time));
                     return (
