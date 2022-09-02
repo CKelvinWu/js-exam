@@ -111,7 +111,7 @@ const InterviewSummaryModal = props => (
           <>
             <AddNewScoreRedux
               questionid={questionid}
-              uppervisible={props.ModalVisible}
+              uppervisible={props.visible}
             ></AddNewScoreRedux>
           </>
         );
@@ -161,7 +161,7 @@ const InterviewSummaryModal = props => (
                         Author: z.author, //2013-11-18T08:55:00-08:00
                         Content: z.content,
                         Time: moment
-                          .tz(z.time.substring(0, 19), 'America/New York')
+                          .tz(z.time.substring(0, 19), 'America/New_York')
                           .tz(timezone)
                           .format()
                           .substring(11, 16),

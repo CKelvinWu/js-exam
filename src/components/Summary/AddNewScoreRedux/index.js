@@ -1,6 +1,6 @@
 import React from 'react';
 import { Rate, Row, Col, Input, Button, message, Form } from 'antd';
-import { reduxForm, Field, getFormValues } from 'redux-form';
+import { reduxForm, Field, getFormValues, initialize, reset } from 'redux-form';
 import createComment from 'utils/comment/comment';
 import { connect } from 'react-redux';
 const { TextArea } = Input;
@@ -126,11 +126,9 @@ class AddNewScoreFormRedux extends React.Component {
     event.preventDefault();
     this.submitForm();
   };
-  handleVisible = event => {
-    if (this.props.uppervisible === false) {
-      this.formStates.reset();
-    }
-  };
+  componentWillUnmount() {
+    this.props.reset();
+  }
 
   onDetectNullValue = e => {
     setTimeout(
@@ -161,6 +159,7 @@ class AddNewScoreFormRedux extends React.Component {
       Number.isFinite(this.props.formStates?.quality) &&
       Number.isFinite(this.props.formStates?.completeness) &&
       Number.isFinite(this.props.formStates?.hint);
+    console.log(this.props.uppervisible);
     return (
       <>
         <Row type="flex" align="middle">
