@@ -46,6 +46,39 @@ const FieldizeComment = (height, width) => ({
       hasFeedback={hasFeedback && hasError}
       help={hasError && meta.error}
     >
+      <TextArea
+        bordered={false}
+        {...input}
+        {...rest}
+        children={children}
+        style={{
+          height: heightpx,
+          width: widthpx,
+          overflowY: 'auto',
+        }}
+      ></TextArea>
+    </FormItem>
+  );
+};
+const FieldizeInput = (height, width) => ({
+  input,
+  meta,
+  children,
+  hasFeedback,
+  label,
+  ...rest
+}) => {
+  const FormItem = Form.Item;
+  const hasError = meta.touched && meta.invalid;
+  const heightpx = height.toString() + 'px';
+  const widthpx = width.toString() + 'px';
+  return (
+    <FormItem
+      label={label}
+      validateStatus={hasError ? 'error' : 'success'}
+      hasFeedback={hasFeedback && hasError}
+      help={hasError && meta.error}
+    >
       <Input
         bordered={false}
         {...input}
@@ -62,7 +95,7 @@ const FieldizeComment = (height, width) => ({
 };
 const RateScore = FieldizeRate();
 const CommentScore = FieldizeComment(200, 400);
-const NameScore = FieldizeComment(40, 200);
+const NameScore = FieldizeInput(40, 200);
 //Reference: https://codesandbox.io/s/jzyl70wpk?file=/SimpleForm.js:611-1048
 
 class AddNewScoreFormRedux extends React.Component {
@@ -93,6 +126,11 @@ class AddNewScoreFormRedux extends React.Component {
     event.preventDefault();
     this.submitForm();
   };
+  handleVisible = event => {
+    if (this.props.uppervisible === false) {
+      this.formStates.reset();
+    }
+  };
 
   onDetectNullValue = e => {
     setTimeout(
@@ -118,10 +156,17 @@ class AddNewScoreFormRedux extends React.Component {
   //setting timeout to make data get enough time stored in redux store
 
   render() {
+    const shouldEnableSubmitButton =
+      this.props.formStates?.name &&
+      Number.isFinite(this.props.formStates?.quality) &&
+      Number.isFinite(this.props.formStates?.completeness) &&
+      Number.isFinite(this.props.formStates?.hint);
     return (
       <>
         <Row type="flex" align="middle">
-          <h2 style={{ fontSize: '20px' }}>Interviewer：</h2>
+          <h2 style={{ fontSize: '20px', marginTop: '-10px' }}>
+            Interviewer：
+          </h2>
           <Field
             name="name"
             component={NameScore}
@@ -147,7 +192,6 @@ class AddNewScoreFormRedux extends React.Component {
               </Row>
               <Row type="flex">
                 <h4 style={{ display: 'inline', marginTop: '10px' }}>
-                  {' '}
                   Potential
                 </h4>
                 <Field
@@ -159,8 +203,7 @@ class AddNewScoreFormRedux extends React.Component {
               </Row>
               <Row type="flex">
                 <h4 style={{ display: 'inline', marginTop: '10px' }}>
-                  {' '}
-                  Adaptability{' '}
+                  Adaptability
                 </h4>
                 <Field
                   name="hint"
@@ -195,7 +238,7 @@ class AddNewScoreFormRedux extends React.Component {
                     marginLeft: '150px',
                     width: '100px',
                   }}
-                  disabled={this.state.DisableSubmit}
+                  disabled={!shouldEnableSubmitButton}
                   htmlType="submit"
                   onClick={this.handleSubmit}
                   onKeyPress={e => {
