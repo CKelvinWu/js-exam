@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { formatTime } from 'utils/format';
-
+import { reset } from 'redux-form';
 import { List, Avatar, Icon, Button, Modal } from 'antd';
 import { deleteTestAction } from 'redux/test/actions';
 import InterviewSummaryModal from 'components/Summary/InterviewSummaryModal';
@@ -35,7 +35,7 @@ class TestList extends React.Component {
 
   handleOnOkDelConfirmModal = async () => {
     const { delTest } = this.state;
-    const { deleteTestAction } = this.props;
+    const { deleteTestAction } = this.props.deleteTestAction;
     this.hideDelConfirmModal();
     // show the delete animation first and then do the delete action
     this.setState({ delAnime: true });
@@ -57,6 +57,8 @@ class TestList extends React.Component {
     this.setState({
       testResultModalVisible: false,
     });
+    this.props.resetForm('AddScore');
+    console.log('close element');
   };
 
   render() {
@@ -169,5 +171,6 @@ TestList.propTypes = {
 
 const mapDispatchToProps = dispatch => ({
   deleteTestAction: delTest => dispatch(deleteTestAction(delTest)),
+  resetForm: (form, field, newValue) => dispatch(reset(form)),
 });
 export default connect(null, mapDispatchToProps)(TestList);

@@ -126,9 +126,6 @@ class AddNewScoreFormRedux extends React.Component {
     event.preventDefault();
     this.submitForm();
   };
-  componentWillUnmount() {
-    this.props.reset();
-  }
 
   onDetectNullValue = e => {
     setTimeout(
@@ -140,7 +137,7 @@ class AddNewScoreFormRedux extends React.Component {
             this.props.formStates.completeness !== undefined &&
             this.props.formStates.hint !== undefined
           ) {
-            console.log(this.props.formStates.hint !== undefined);
+            //console.log(this.props.formStates.hint !== undefined);
             this.setState({ DisableSubmit: false });
           }
         } catch (e) {
@@ -159,7 +156,11 @@ class AddNewScoreFormRedux extends React.Component {
       Number.isFinite(this.props.formStates?.quality) &&
       Number.isFinite(this.props.formStates?.completeness) &&
       Number.isFinite(this.props.formStates?.hint);
-    console.log(this.props.uppervisible);
+
+    /*if (this.props.uppervisible===false){
+      console.log("false in react")
+  
+    }*/
     return (
       <>
         <Row type="flex" align="middle">
@@ -261,6 +262,7 @@ function mapStateToProps(state) {
     formStates: getFormValues('AddScore')(state),
   };
 }
+
 export default connect(mapStateToProps)(
   reduxForm({ form: 'AddScore' })(AddNewScoreFormRedux),
 );

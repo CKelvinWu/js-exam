@@ -1,4 +1,6 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { reset } from 'redux-form';
 import { Typography, Modal, Row, Col, Table } from 'antd';
 import PropTypes from 'prop-types';
 import { Connect } from 'aws-amplify-react';
@@ -28,6 +30,7 @@ const toInterviewResult = data => {
     });
   });
   const summaries = data.results.items;
+  console.log('original data', interviewers, questions, comments, summaries);
   return { interviewers, questions, comments, summaries };
 };
 
@@ -203,5 +206,7 @@ InterviewSummaryModal.propTypes = {
   footer: PropTypes.object,
   width: PropTypes.number.isRequired,
 };
-
-export default InterviewSummaryModal;
+const mapDispatchToProps = dispatch => ({
+  resetForm: (form, field, newValue) => dispatch(reset(form)),
+});
+export default connect(null, mapDispatchToProps)(InterviewSummaryModal);
