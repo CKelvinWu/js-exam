@@ -30,7 +30,6 @@ const toInterviewResult = data => {
     });
   });
   const summaries = data.results.items;
-  console.log('original data', interviewers, questions, comments, summaries);
   return { interviewers, questions, comments, summaries };
 };
 
@@ -53,6 +52,28 @@ const handleScoreSubscription = (prev, { onCreateComment: newComment }) => {
   prev.getTest.records.items[0].comment.items.push(new_data);
   return prev;
 };
+const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+const columns = [
+  {
+    title: 'Author',
+    dataIndex: 'Author',
+    key: 'Author',
+    sorter: (a, b) => a.Author.localeCompare(b.Author),
+    sortDirections: ['descend', 'ascend'],
+  },
+  {
+    title: 'Content',
+    dataIndex: 'Content',
+    key: 'Content',
+  },
+  {
+    title: 'Time',
+    dataIndex: 'Time',
+    key: 'Time',
+    sorter: (a, b) => a.Time.localeCompare(b.Time),
+    sortDirections: ['descend', 'ascend'],
+  },
+];
 
 const InterviewSummaryModal = props => (
   <Modal
@@ -88,35 +109,12 @@ const InterviewSummaryModal = props => (
           comments.sort((a, b) => a.time.localeCompare(b.time));
         }
         let new_score = '';
-        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        const columns = [
-          {
-            title: 'Author',
-            dataIndex: 'Author',
-            key: 'Author',
-            sorter: (a, b) => a.Author.localeCompare(b.Author),
-            sortDirections: ['descend', 'ascend'],
-          },
-          {
-            title: 'Content',
-            dataIndex: 'Content',
-            key: 'Content',
-          },
-          {
-            title: 'Time',
-            dataIndex: 'Time',
-            key: 'Time',
-            sorter: (a, b) => a.Time.localeCompare(b.Time),
-            sortDirections: ['descend', 'ascend'],
-          },
-        ];
+
         new_score = (
-          <>
-            <AddNewScoreRedux
-              questionid={questionid}
-              uppervisible={props.visible}
-            ></AddNewScoreRedux>
-          </>
+          <AddNewScoreRedux
+            questionid={questionid}
+            uppervisible={props.visible}
+          ></AddNewScoreRedux>
         );
 
         ////////////////////////////data part//////////////////

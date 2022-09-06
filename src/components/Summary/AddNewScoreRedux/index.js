@@ -37,8 +37,8 @@ const FieldizeComment = (height, width) => ({
 }) => {
   const FormItem = Form.Item;
   const hasError = meta.touched && meta.invalid;
-  const heightpx = height.toString() + 'px';
-  const widthpx = width.toString() + 'px';
+  const heightPx = `${height}px`;
+  const widthPx = `${width}px`;
   return (
     <FormItem
       label={label}
@@ -52,8 +52,8 @@ const FieldizeComment = (height, width) => ({
         {...rest}
         children={children}
         style={{
-          height: heightpx,
-          width: widthpx,
+          height: heightPx,
+          width: widthPx,
           overflowY: 'auto',
         }}
       ></TextArea>
@@ -70,8 +70,8 @@ const FieldizeInput = (height, width) => ({
 }) => {
   const FormItem = Form.Item;
   const hasError = meta.touched && meta.invalid;
-  const heightpx = height.toString() + 'px';
-  const widthpx = width.toString() + 'px';
+  const heightPx = `${height}px`;
+  const widthPx = `${width}px`;
   return (
     <FormItem
       label={label}
@@ -85,8 +85,8 @@ const FieldizeInput = (height, width) => ({
         {...rest}
         children={children}
         style={{
-          height: heightpx,
-          width: widthpx,
+          height: heightPx,
+          width: widthPx,
           overflowY: 'auto',
         }}
       ></Input>
@@ -101,7 +101,7 @@ const NameScore = FieldizeInput(40, 200);
 class AddNewScoreFormRedux extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { DisableSubmit: true };
+
     this.submitForm = this.props.handleSubmit(async data => {
       const id = this.props.questionid;
       const params = {
@@ -127,40 +127,12 @@ class AddNewScoreFormRedux extends React.Component {
     this.submitForm();
   };
 
-  onDetectNullValue = e => {
-    setTimeout(
-      () => {
-        try {
-          if (
-            this.props.formStates.name !== undefined &&
-            this.props.formStates.quality !== undefined &&
-            this.props.formStates.completeness !== undefined &&
-            this.props.formStates.hint !== undefined
-          ) {
-            //console.log(this.props.formStates.hint !== undefined);
-            this.setState({ DisableSubmit: false });
-          }
-        } catch (e) {
-          this.setState({ DisableSubmit: true });
-        }
-      },
-
-      '50',
-    );
-  };
-  //setting timeout to make data get enough time stored in redux store
-
   render() {
     const shouldEnableSubmitButton =
       this.props.formStates?.name &&
       Number.isFinite(this.props.formStates?.quality) &&
       Number.isFinite(this.props.formStates?.completeness) &&
       Number.isFinite(this.props.formStates?.hint);
-
-    /*if (this.props.uppervisible===false){
-      console.log("false in react")
-  
-    }*/
     return (
       <>
         <Row type="flex" align="middle">
@@ -173,7 +145,6 @@ class AddNewScoreFormRedux extends React.Component {
             type="text"
             placeholder="please leave your name"
             style={{ width: '240px', height: '50px', marginTop: '-10px' }}
-            onChange={this.onDetectNullValue}
           />
         </Row>
         <form>
@@ -184,10 +155,9 @@ class AddNewScoreFormRedux extends React.Component {
                   Skills
                 </h4>
                 <Field
-                  style={{ marginLeft: '145px', marginTop: '110px' }}
+                  style={{ marginLeft: '140px', marginTop: '110px' }}
                   name="quality"
                   component={RateScore}
-                  onChange={this.onDetectNullValue}
                 />
               </Row>
               <Row type="flex">
@@ -195,10 +165,9 @@ class AddNewScoreFormRedux extends React.Component {
                   Potential
                 </h4>
                 <Field
-                  style={{ marginLeft: '120px', marginBottom: '-130px' }}
+                  style={{ marginLeft: '115px', marginBottom: '-130px' }}
                   name="completeness"
                   component={RateScore}
-                  onChange={this.onDetectNullValue}
                 />
               </Row>
               <Row type="flex">
@@ -255,11 +224,10 @@ class AddNewScoreFormRedux extends React.Component {
     );
   }
 }
-
-//const testreduxstate=connect(mapStateToProps, null)(AddNewScoreFormRedux);
+const formName = 'AddScore';
 function mapStateToProps(state) {
   return {
-    formStates: getFormValues('AddScore')(state),
+    formStates: getFormValues(formName)(state),
   };
 }
 

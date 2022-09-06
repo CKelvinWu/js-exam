@@ -35,7 +35,7 @@ class TestList extends React.Component {
 
   handleOnOkDelConfirmModal = async () => {
     const { delTest } = this.state;
-    const { deleteTestAction } = this.props.deleteTestAction;
+    const deleteTestAction = this.props.deleteTestAction;
     this.hideDelConfirmModal();
     // show the delete animation first and then do the delete action
     this.setState({ delAnime: true });
@@ -58,7 +58,6 @@ class TestList extends React.Component {
       testResultModalVisible: false,
     });
     this.props.resetForm('AddScore');
-    console.log('close element');
   };
 
   render() {
