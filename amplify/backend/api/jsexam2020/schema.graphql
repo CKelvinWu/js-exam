@@ -92,9 +92,9 @@ type Comment @model {
   author: String
   time: AWSDateTime
   content: String
-  hint: Int!
-  quality: Int!
-  completeness: Int!
+  hint: Float!
+  quality: Float!
+  completeness: Float!
   tags: [String]
   record: Record @connection(name: "RecordComments")
 }

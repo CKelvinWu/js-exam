@@ -46,4 +46,4 @@ Admin.propTypes = {
   ]).isRequired,
 };
 
-export default withAuthenticator(Admin, false, [<SignIn />]);
+export default withAuthenticator(Admin, [<SignIn />]);

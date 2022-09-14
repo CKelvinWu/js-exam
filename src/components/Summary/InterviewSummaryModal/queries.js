@@ -59,6 +59,7 @@ export const getTest2 = `query GetTest($id: ID!) {
               content
               hint
               quality
+              time
             }
           }
           history {
