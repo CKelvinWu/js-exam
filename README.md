@@ -122,6 +122,7 @@ it will require your `key_id` and `access_key` and make an `.aws` folder with cr
   
 3. Refresh the page, your user status should be confirmed now
 4. Do not forget to create a Interviewee account, it is required for interviewee to successfully
+5. Please enter a random email or phone and mark it as verified in cognito
 
 ### Step 5 - Deployment
 1. After the amplify init is finished, type  `npm run build` 
