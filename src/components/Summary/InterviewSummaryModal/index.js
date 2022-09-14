@@ -1,16 +1,21 @@
 import React from 'react';
-import { Typography, Modal, Row, Col, Card, Rate, Empty } from 'antd';
+import { connect } from 'react-redux';
+import { reset } from 'redux-form';
+import { Typography, Modal, Row, Col, Table } from 'antd';
 import PropTypes from 'prop-types';
 import { Connect } from 'aws-amplify-react';
-import { graphqlOperation } from 'aws-amplify';
+import { API, graphqlOperation } from 'aws-amplify';
 import PageEmpty from 'components/PageEmpty';
 import PageSpin from 'components/PageSpin';
 import QuestionComment from 'components/Summary/QuestionComment';
-import { onCreateResult } from 'graphql/subscriptions';
-import { getTest } from './queries';
+import { onCreateResult, onCreateComment } from 'graphql/subscriptions';
+import { getTest2 } from './queries';
+import AddNewScoreRedux from 'components/Summary/AddNewScoreRedux';
+import moment from 'moment-timezone';
 
 const toInterviewResult = data => {
-  const interviewers = data.users.items.map(v => v.user);
+  const interviewers = data.users.items.filter(x => x).map(v => v.user);
+
   const questions = data.records.items.map(v => ({
     id: v.id,
     name: v.ques.name,
@@ -35,6 +40,40 @@ const handleSummarySubscription = (prev, { onCreateResult: newResult }) => {
   prev.getTest.results.items.push(newResult);
   return prev;
 };
+const handleScoreSubscription = (prev, { onCreateComment: newComment }) => {
+  const new_data = {
+    author: newComment.author,
+    completeness: newComment.completeness,
+    content: newComment.content,
+    hint: newComment.hint,
+    quality: newComment.quality,
+    time: newComment.time,
+  };
+  prev.getTest.records.items[0].comment.items.push(new_data);
+  return prev;
+};
+const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+const columns = [
+  {
+    title: 'Author',
+    dataIndex: 'Author',
+    key: 'Author',
+    sorter: (a, b) => a.Author.localeCompare(b.Author),
+    sortDirections: ['descend', 'ascend'],
+  },
+  {
+    title: 'Content',
+    dataIndex: 'Content',
+    key: 'Content',
+  },
+  {
+    title: 'Time',
+    dataIndex: 'Time',
+    key: 'Time',
+    sorter: (a, b) => a.Time.localeCompare(b.Time),
+    sortDirections: ['descend', 'ascend'],
+  },
+];
 
 const InterviewSummaryModal = props => (
   <Modal
@@ -45,11 +84,11 @@ const InterviewSummaryModal = props => (
     width={props.width}
   >
     <Connect
-      query={graphqlOperation(getTest, {
+      query={graphqlOperation(getTest2, {
         id: props.testID,
       })}
-      subscription={graphqlOperation(onCreateResult)}
-      onSubscriptionMsg={handleSummarySubscription}
+      subscription={graphqlOperation(onCreateComment)}
+      onSubscriptionMsg={handleScoreSubscription}
     >
       {({ data, loading, error }) => {
         const test = data && data.getTest;
@@ -57,13 +96,28 @@ const InterviewSummaryModal = props => (
         let questions = [];
         let comments = [];
         let summaries = [];
+        let records = [];
+        let questionid = '';
         if (data && !loading && !error) {
           const interviewResult = toInterviewResult(test);
           interviewers = interviewResult.interviewers;
           questions = interviewResult.questions;
           comments = interviewResult.comments;
           summaries = interviewResult.summaries;
+          records = data.getTest.records.items;
+          questionid = data.getTest.records.items[0].id;
+          comments.sort((a, b) => a.time.localeCompare(b.time));
         }
+        let new_score = '';
+
+        new_score = (
+          <AddNewScoreRedux
+            questionid={questionid}
+            uppervisible={props.visible}
+          ></AddNewScoreRedux>
+        );
+
+        ////////////////////////////data part//////////////////
         return (
           <PageSpin spinning={loading}>
             {!loading && error && (
@@ -79,86 +133,56 @@ const InterviewSummaryModal = props => (
 
             {!loading && test && (
               <>
-                <Typography.Title level={4}>
-                  Interview Questions
-                </Typography.Title>
-                {interviewers.map(interviewer => (
-                  <QuestionComment
-                    key={interviewer.id}
-                    interviewer={interviewer.name}
-                    questions={questions}
-                    comments={comments.filter(
-                      c => c.author === interviewer.name,
-                    )}
-                  />
-                ))}
-                <Typography.Title level={4}>Summary</Typography.Title>
+                <Typography.Title level={4}>Overall Score</Typography.Title>
+                {comments.map(comment => {
+                  const questioncomment = (
+                    <>
+                      <QuestionComment
+                        interviewer={comment.author}
+                        questions={[questions[0]]}
+                        comments={[comment]}
+                      />
+                    </>
+                  );
+
+                  return questioncomment;
+                })}
+                <br></br>
+                {new_score}
+                <br></br>
+                <Typography.Title level={4}>Comments</Typography.Title>
                 <Row type="flex" justify="space-around">
-                  {interviewers.map(interviewer => {
-                    const summary = summaries.find(
-                      v => v.author === interviewer.name,
-                    );
+                  {records.map(record => {
+                    const single_question = record.ques;
+                    const wrap_data = record.history.items
+                      .map(x => x.snapComments)
+                      .map(y => y.items)
+                      .flat()
+                      .map(z => ({
+                        Author: z.author, //2013-11-18T08:55:00-08:00
+                        Content: z.content,
+                        Time: moment
+                          .tz(z.time.substring(0, 19), 'America/New_York')
+                          .tz(timezone)
+                          .format()
+                          .substring(11, 16),
+                      }))
+                      .sort((a, b) => a.Time.localeCompare(b.Time));
                     return (
-                      <Col key={interviewer.id} span={20 / interviewers.length}>
+                      <Col key={single_question.id} span={10}>
                         <Row type="flex" align="middle" justify="space-around">
-                          <h3>Interviewer：{interviewer.name}</h3>
+                          <h3 style={{ marginTop: '50px' }}>
+                            Questions：{single_question.name}
+                          </h3>
                         </Row>
                         <Row>
-                          {summary ? (
-                            <Card>
-                              <Card
-                                bordered={false}
-                                title="Technical Skills："
-                                type="inner"
-                              >
-                                <div
-                                  style={{
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                  }}
-                                >
-                                  <h4 style={{ width: '49%' }}>Logic</h4>
-                                  <Rate value={summary.logic} disabled />
-                                </div>
-                                <div
-                                  style={{
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                  }}
-                                >
-                                  <h4 style={{ width: '49%' }}>
-                                    JavaScript Familiarity
-                                  </h4>
-                                  <Rate value={summary.language} disabled />
-                                </div>
-                                <Card type="inner">
-                                  <p>{summary.techreview}</p>
-                                </Card>
-                              </Card>
-                              <Card
-                                bordered={false}
-                                title="Personality："
-                                type="inner"
-                              >
-                                <div
-                                  style={{
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                  }}
-                                >
-                                  <h4 style={{ width: '49%' }}>
-                                    Good to work with
-                                  </h4>
-                                  <Rate value={summary.workwith} disabled />
-                                </div>
-                                <Card type="inner">
-                                  <p>{summary.perstyreview}</p>
-                                </Card>
-                              </Card>
-                            </Card>
-                          ) : (
-                            <Empty description="No Comment Yet..." />
-                          )}
+                          <Table
+                            width={40}
+                            dataSource={wrap_data}
+                            columns={columns}
+                            pagination={false}
+                            style={{ height: '300px', overflowY: 'auto' }}
+                          />
                         </Row>
                       </Col>
                     );
@@ -172,7 +196,6 @@ const InterviewSummaryModal = props => (
     </Connect>
   </Modal>
 );
-
 InterviewSummaryModal.propTypes = {
   testID: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
@@ -181,5 +204,7 @@ InterviewSummaryModal.propTypes = {
   footer: PropTypes.object,
   width: PropTypes.number.isRequired,
 };
-
-export default InterviewSummaryModal;
+const mapDispatchToProps = dispatch => ({
+  resetForm: (form, field, newValue) => dispatch(reset(form)),
+});
+export default connect(null, mapDispatchToProps)(InterviewSummaryModal);

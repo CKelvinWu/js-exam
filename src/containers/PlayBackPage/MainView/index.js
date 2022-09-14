@@ -26,7 +26,6 @@ import {
 import playbackReducer from 'redux/playback/reducer';
 import { REDUCER_KEY } from 'redux/playback/constants';
 
-import Summary from '../Summary';
 import HistorySlider from '../HistorySlider';
 
 const PlaybackView = args => {
@@ -42,7 +41,6 @@ const PlaybackView = args => {
 class Playback extends React.Component {
   state = {
     isLoading: false,
-    summaryVisible: false,
   };
 
   componentWillUnmount() {
@@ -168,14 +166,6 @@ class Playback extends React.Component {
     }
   };
 
-  onClickSummary = () => {
-    this.setState({ summaryVisible: true });
-  };
-
-  onCancelSummary = () => {
-    this.setState({ summaryVisible: false });
-  };
-
   render() {
     const {
       handleCodeChange,
@@ -186,7 +176,7 @@ class Playback extends React.Component {
       onBackwardSnapComment,
       onSliderChange,
     } = this;
-    const { isLoading, summaryVisible } = this.state;
+    const { isLoading } = this.state;
     const {
       testData,
       records,
@@ -210,17 +200,6 @@ class Playback extends React.Component {
             recordIndex={recordIndex}
             onChangeRecord={onChangeRecord}
             recordList={records}
-            summaryDisabled={record.comment.items.length === 0}
-            onClickSummary={() => {
-              this.setState({ summaryVisible: true });
-            }}
-          />
-          <Summary
-            summaryList={record.comment.items}
-            visible={summaryVisible}
-            onCancel={() => {
-              this.setState({ summaryVisible: false });
-            }}
           />
           <div style={{ display: 'flex' }}>
             <PlaybackView

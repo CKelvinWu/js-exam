@@ -1,63 +1,73 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Row, Col, Rate, Icon, Divider } from 'antd';
+import { Row, Col, Rate, Icon, Divider, Typography, Comment } from 'antd';
+import { Connect } from 'aws-amplify-react';
+import { API, graphqlOperation } from 'aws-amplify';
+import { onCreateComment } from 'graphql/subscriptions';
 
 class QuestionComment extends React.Component {
   render() {
     const { interviewer, questions, comments } = this.props;
+    if (!comments || !comments.length) {
+      return (
+        <h4 style={{ display: 'inline', color: 'red' }}>Not Available !</h4>
+      );
+    }
     return (
       <>
-        <h3>Interviewer：{interviewer}</h3>
-        {questions.map((ques, index) => {
-          const comment = comments.find(c => c.questionID === ques.id);
+        <h2>Interviewer：{interviewer}</h2>
+        {questions.map(ques => {
           return (
-            <Row
-              key={comment.questionID}
-              type="flex"
-              align="middle"
-              style={{ marginTop: '20px' }}
-            >
-              <Col span={8} offset={3}>
-                <h4>{`${index + 1}. ${ques.name}`}</h4>
+            <Row key={ques.id} type="flex" align="middle">
+              <Col>
+                <Row>
+                  <h4 style={{ display: 'inline' }}> Skills</h4>
+                  <Rate
+                    style={{ marginLeft: '145px' }}
+                    allowHalf
+                    value={comments[0].quality}
+                  />
+                </Row>
+                <Row>
+                  <h4 style={{ display: 'inline' }}> Potential</h4>
+                  <Rate
+                    style={{ marginLeft: '122px' }}
+                    allowHalf
+                    value={comments[0].completeness}
+                  />
+                </Row>
+                <Row>
+                  <h4 style={{ display: 'inline' }}> Adaptability </h4>
+                  <Rate
+                    style={{ marginLeft: '100px' }}
+                    allowHalf
+                    value={comments[0].hint}
+                  />
+                </Row>
               </Col>
-              {comment ? (
-                <>
-                  <Col span={4}>
-                    <h4 style={{ display: 'inline' }}> Code quality </h4>
-                  </Col>
-                  <Col span={8}>
-                    <Rate disabled value={comment.quality} />
-                  </Col>
-                  <Col span={4} offset={11}>
-                    <h4 style={{ display: 'inline' }}> Compeleteness </h4>
-                  </Col>
-                  <Col span={8}>
-                    <Rate disabled value={comment.completeness} />
-                  </Col>
-                  <Col span={4} offset={11}>
-                    <h4 style={{ display: 'inline' }}> How much hints </h4>
-                  </Col>
-                  <Col span={8}>
-                    <Rate
-                      disabled
-                      value={comment.hint}
-                      character={<Icon type="bulb" theme="filled" />}
-                      style={{ color: 'grey' }}
-                    />
-                  </Col>
-                </>
-              ) : (
-                <>
-                  <Col span={4}>
-                    <h4 style={{ display: 'inline', color: 'red' }}>
-                      {' '}
-                      Not Available !{' '}
-                    </h4>
-                  </Col>
-                </>
-              )}
+              <>
+                <Col
+                  type="flex"
+                  span={10}
+                  offset={5}
+                  style={{ marginTop: '-40px' }}
+                >
+                  <h2 style={{ marginBottom: '50px' }}>Comment </h2>
+
+                  <Comment
+                    style={{
+                      height: '200px',
+                      width: '400px',
+                      overflowY: 'auto',
+                    }}
+                    type="flex"
+                    content={comments[0].content}
+                  />
+                </Col>
+              </>
             </Row>
           );
+          // the if statement
         })}
         <Divider dashed />
       </>

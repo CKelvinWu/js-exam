@@ -11,7 +11,6 @@ import {
   subscribeOnUpdateRecordByRecordId,
   RECORD_STATUS,
 } from 'utils/record';
-import createComment from 'utils/comment/comment';
 import User from 'utils/user';
 
 import { getRoomInfo, deleteRoomAction, setRoomHost } from 'redux/room/actions';
@@ -27,7 +26,6 @@ import { updateTestEndTimeData, setTestInterviewer } from 'redux/test/actions';
 
 import PageEmpty from 'components/PageEmpty';
 import PageSpin from 'components/PageSpin';
-import CommentBox from 'components/CommentBox';
 import ControlWidget from 'components/Widgets/ControlWidget/DispatchPage';
 import ReactPage from './ReactPage';
 import JavaScriptPage from './JavaScriptPage';
@@ -53,7 +51,6 @@ class Page extends Component {
   subscription = null;
 
   state = {
-    commentBoxVisible: false,
     categoryIndex: 0,
     questionIndex: 0,
     code: '',
@@ -96,13 +93,15 @@ class Page extends Component {
       message.error('delete room failed');
     }
   }
-
+  //this maybe helpful for subscribe the new record
+  //the this.subscription create a promise
   subscribeOnCreateHistory = () => {
     if (!this.subscription) {
       this.subscription = API.graphql(
         graphqlOperation(subscriptions.onCreateHistory),
       ).subscribe({
         next: ({ value }) => {
+          //this means after subscribe what to do
           const onCreateHistory = value.data.onCreateHistory;
           const { record, actions } = this.props;
           if (onCreateHistory.record.id === record.id) {
@@ -291,10 +290,10 @@ class Page extends Component {
       }
     });
   };
-
+  //hook to the record
   subscribeRecordUpdate = () => {
     this.subscriptionForUpdateRecordByRecordId = subscribeOnUpdateRecordByRecordId(
-      this.props.record.id,
+      this.props.record.id, //here is the callback
       data => {
         const { room, syncCode } = data;
         if (room.id === this.props.room.id) {
@@ -302,7 +301,6 @@ class Page extends Component {
             data.status === RECORD_STATUS.closed &&
             this.props.record.status !== RECORD_STATUS.closed
           ) {
-            this.setCommentBox();
           }
 
           this.props.actions.setCurrentRecord(data);
@@ -324,29 +322,6 @@ class Page extends Component {
       error: error => {
         console.error(error);
       },
-    });
-  };
-
-  onCreateComment = async data => {
-    const { id } = this.props.record;
-    const params = {
-      commentRecordId: id,
-      author: User.getUserName(),
-      quality: data.input.rateQuality,
-      hint: data.input.rateHint,
-      completeness: data.input.rateComplete,
-      tags: data.input.tags,
-      content: data.input.summary,
-    };
-    await createComment(params);
-    message.success('Add Comment successfully');
-    this.setCommentBox();
-  };
-
-  setCommentBox = () => {
-    const { commentBoxVisible } = this.state;
-    this.setState({
-      commentBoxVisible: !commentBoxVisible,
     });
   };
 
@@ -390,7 +365,6 @@ class Page extends Component {
       isLoading,
       categoryIndex,
       questionIndex,
-      commentBoxVisible,
       delConfirmModalVisible,
       ran,
     } = this.state;
@@ -403,7 +377,6 @@ class Page extends Component {
       addTape,
       resetTape,
       onTagUpdate,
-      setCommentBox,
       showDelConfirmModal,
       hideDelConfirmModal,
       handleOnOkDelConfirmModal,
@@ -446,11 +419,7 @@ class Page extends Component {
             <PageEmpty description={<span>Room Not Found</span>} />
           )}
         </PageSpin>
-        <CommentBox
-          onSubmit={this.onCreateComment}
-          visible={commentBoxVisible}
-          setVisible={setCommentBox}
-        />
+
         <Modal
           title=""
           visible={delConfirmModalVisible}

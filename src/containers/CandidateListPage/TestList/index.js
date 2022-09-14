@@ -3,10 +3,9 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { formatTime } from 'utils/format';
-
-import { List, Avatar, Icon, Button, Modal, Tooltip } from 'antd';
+import { reset } from 'redux-form';
+import { List, Avatar, Icon, Button, Modal } from 'antd';
 import { deleteTestAction } from 'redux/test/actions';
-import AddSummaryModal from 'components/Summary/AddSummaryModal';
 import InterviewSummaryModal from 'components/Summary/InterviewSummaryModal';
 import style from './TestList.module.scss';
 
@@ -17,8 +16,6 @@ class TestList extends React.Component {
     delAnime: false,
     testResultModalVisible: false,
     testResultModalTarget: '',
-    addSummaryModalVisible: false,
-    addSummaryModalTarget: '',
     testId: '',
   };
 
@@ -38,7 +35,7 @@ class TestList extends React.Component {
 
   handleOnOkDelConfirmModal = async () => {
     const { delTest } = this.state;
-    const { deleteTestAction } = this.props;
+    const deleteTestAction = this.props.deleteTestAction;
     this.hideDelConfirmModal();
     // show the delete animation first and then do the delete action
     this.setState({ delAnime: true });
@@ -60,20 +57,7 @@ class TestList extends React.Component {
     this.setState({
       testResultModalVisible: false,
     });
-  };
-
-  showAddSummaryModal = e => {
-    this.setState({
-      addSummaryModalVisible: true,
-      addSummaryModalTarget: e.target.getAttribute('candidate'),
-      testId: e.target.getAttribute('testid'),
-    });
-  };
-
-  addSummaryModalCancel = () => {
-    this.setState({
-      addSummaryModalVisible: false,
-    });
+    this.props.resetForm('AddScore');
   };
 
   render() {
@@ -84,8 +68,6 @@ class TestList extends React.Component {
       delAnime,
       testResultModalVisible,
       testResultModalTarget,
-      addSummaryModalVisible,
-      addSummaryModalTarget,
       testId,
     } = this.state;
     const jeUser = localStorage.jeUser && JSON.parse(localStorage.jeUser);
@@ -99,10 +81,6 @@ class TestList extends React.Component {
             const actions = [];
             const atLeastOneEndRecord =
               item.records.items.filter(v => v.status === 'closed').length > 0;
-            const isInterviewer =
-              item.users.items &&
-              item.users.items.map(v => v && v.user.id).includes(jeUser.id) &&
-              !item.results.items.map(v => v.author).includes(jeUser.name);
             const isHost = item.host && item.host.id === jeUser.id;
             if (isHost) {
               actions.push(
@@ -116,25 +94,8 @@ class TestList extends React.Component {
               );
             }
             if (atLeastOneEndRecord) {
-              if (isInterviewer) {
-                actions.push(
-                  <Tooltip
-                    placement="top"
-                    title="write summary"
-                    onClick={this.handleSummaryEdit}
-                  >
-                    <Button
-                      type="link"
-                      icon="form"
-                      candidate={item.subjectId}
-                      testid={item.id}
-                      onClick={this.showAddSummaryModal}
-                    >
-                      Write Summary
-                    </Button>
-                  </Tooltip>,
-                );
-              }
+              //here we still need the atleastoneendrecord to check if the
+              //test is still going on
               actions.push(
                 <Button
                   type="link"
@@ -185,15 +146,9 @@ class TestList extends React.Component {
           onCancel={this.testResultModalCancel}
           footer={null}
           width={1000}
+          currentuser={jeUser}
         ></InterviewSummaryModal>
-        <AddSummaryModal
-          testID={testId}
-          title={addSummaryModalTarget}
-          visible={addSummaryModalVisible}
-          onCancel={this.addSummaryModalCancel}
-          footer={null}
-          width={800}
-        ></AddSummaryModal>
+
         <Modal
           title=""
           visible={delConfirmModalVisible}
@@ -215,5 +170,6 @@ TestList.propTypes = {
 
 const mapDispatchToProps = dispatch => ({
   deleteTestAction: delTest => dispatch(deleteTestAction(delTest)),
+  resetForm: (form, field, newValue) => dispatch(reset(form)),
 });
 export default connect(null, mapDispatchToProps)(TestList);
