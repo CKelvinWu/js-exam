@@ -161,11 +161,7 @@ const InterviewSummaryModal = props => (
                       .map(z => ({
                         Author: z.author, //2013-11-18T08:55:00-08:00
                         Content: z.content,
-                        Time: moment
-                          .tz(z.time.substring(0, 19), 'America/New_York')
-                          .tz(timezone)
-                          .format()
-                          .substring(11, 16),
+                        Time: moment.tz(z.time, timezone).format('HH:mm'),
                       }))
                       .sort((a, b) => a.Time.localeCompare(b.Time));
                     return (
