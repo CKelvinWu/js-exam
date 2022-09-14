@@ -178,7 +178,6 @@ class AddNewScoreFormRedux extends React.Component {
                   name="hint"
                   style={{ marginLeft: '100px' }}
                   component={RateScore}
-                  onChange={this.onDetectNullValue}
                 />
               </Row>
             </Col>
