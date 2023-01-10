@@ -162,7 +162,6 @@ class ExamPage extends Component {
         ],
         plugins: ['proposal-object-rest-spread'],
       });
-      console.log('code:', compiledCode);
       this.props.actions.changeCode({ compiledCode });
     } catch (e) {
       this.props.actions.resetConsole();
